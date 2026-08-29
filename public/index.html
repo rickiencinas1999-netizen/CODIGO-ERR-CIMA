@@ -228,6 +228,7 @@
 
   /* Form grid */
   .grid{ display:grid; gap:14px; }
+  .grid > *{ min-width:0; }
   .grid.cols-2{ grid-template-columns:repeat(2,1fr); }
   .grid.cols-3{ grid-template-columns:repeat(3,1fr); }
   .grid.cols-4{ grid-template-columns:repeat(4,1fr); }
@@ -237,11 +238,13 @@
   .field input[type=text], .field input[type=number], .field input[type=date], .field input[type=time], .field input[type=email], .field input[type=url], .field select, .field textarea{
     width:100%; font-family:inherit; font-size:0.9rem; padding:8px 10px; border-radius:8px;
     border:1px solid var(--border); background:var(--surface); color:var(--text);
+    min-width:0;
   }
   .field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--brand); outline-offset:1px; }
   .field textarea{ resize:vertical; min-height:78px; font-family:inherit; }
-  .field-inline-btn{ display:flex; gap:8px; align-items:flex-end; }
-  .field-inline-btn .field{ flex:1; }
+  .field-inline-btn{ display:flex; gap:8px; align-items:flex-end; min-width:0; }
+  .field-inline-btn .field{ flex:1; min-width:0; }
+  .field-inline-btn .btn{ flex:none; }
   .check-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px 14px; }
   @media (max-width:600px){ .check-grid{ grid-template-columns:1fr; } }
   .check-item{ display:flex; align-items:center; gap:8px; font-size:0.86rem; }
