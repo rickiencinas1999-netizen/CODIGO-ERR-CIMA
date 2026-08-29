@@ -1,0 +1,2027 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Equipo de Respuesta Rápida (ERR)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F5F9F8;
+    --surface:#FFFFFF;
+    --surface-2:#EAF2F0;
+    --surface-3:#DCEAE7;
+    --border:#D7E3E0;
+    --text:#16232A;
+    --text-muted:#52666B;
+    --brand:#008375;
+    --brand-strong:#00594F;
+    --brand-tint:#DCF0EC;
+    --on-brand:#FFFFFF;
+    --navy:#303E48;
+    --navy-tint:#E7EBED;
+    --success:#1F8A5F;
+    --success-tint:#DFF3E8;
+    --warning:#9A6B14;
+    --warning-tint:#FCEEC7;
+    --orange:#B15C00;
+    --orange-tint:#FBE6CC;
+    --critical:#B23A2E;
+    --critical-tint:#FBE1DD;
+    --info:#2A5F9E;
+    --info-tint:#DCEAFB;
+    --shadow: 0 1px 2px rgba(20,40,38,0.06), 0 6px 20px -8px rgba(20,40,38,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1517;
+      --surface:#161F21;
+      --surface-2:#1C2729;
+      --surface-3:#233030;
+      --border:#2B3A3A;
+      --text:#E8F2EF;
+      --text-muted:#9FB6B1;
+      --brand:#3FC7AE;
+      --brand-strong:#8FE0CE;
+      --brand-tint:#193532;
+      --on-brand:#0B1416;
+      --navy:#B9C7CC;
+      --navy-tint:#202C2F;
+      --success:#4FCB93;
+      --success-tint:#153228;
+      --warning:#E7B85B;
+      --warning-tint:#372B10;
+      --orange:#E68A3A;
+      --orange-tint:#3A2510;
+      --critical:#EE7C6E;
+      --critical-tint:#3A1C18;
+      --info:#6FA3E0;
+      --info-tint:#152435;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -10px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+      --bg:#0E1517;
+      --surface:#161F21;
+      --surface-2:#1C2729;
+      --surface-3:#233030;
+      --border:#2B3A3A;
+      --text:#E8F2EF;
+      --text-muted:#9FB6B1;
+      --brand:#3FC7AE;
+      --brand-strong:#8FE0CE;
+      --brand-tint:#193532;
+      --on-brand:#0B1416;
+      --navy:#B9C7CC;
+      --navy-tint:#202C2F;
+      --success:#4FCB93;
+      --success-tint:#153228;
+      --warning:#E7B85B;
+      --warning-tint:#372B10;
+      --orange:#E68A3A;
+      --orange-tint:#3A2510;
+      --critical:#EE7C6E;
+      --critical-tint:#3A1C18;
+      --info:#6FA3E0;
+      --info-tint:#152435;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -10px rgba(0,0,0,0.5);
+      color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  a{color:var(--brand);}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:14px 20px 0 20px;
+    transition:padding .15s ease;
+  }
+  .topbar.compact{ padding-top:6px; }
+  .topbar.compact .brandblock p,
+  .topbar.compact .theme-note{ display:none; }
+  .topbar.compact .brandblock h1{ font-size:1.02rem; }
+  .topbar.compact .logo-chip img{ height:22px; }
+  .topbar.compact .tabs{ margin-top:6px; }
+  .topbar.compact .tab-btn{ padding:6px 6px; }
+  .timerbar.compact{ padding:7px 20px; gap:14px; }
+  .timerbar.compact .chip-row{ display:none; }
+  .timerbar.compact .clock{ font-size:1.25rem; }
+  .timerbar.compact .clock-label{ display:none; }
+  .timerbar.compact .btn{ padding:6px 11px; font-size:0.78rem; }
+  .topbar-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .brandblock h1{ margin:0; font-size:1.32rem; font-weight:800; letter-spacing:-0.01em; }
+  .brandblock p{ margin:2px 0 0; font-size:0.86rem; color:var(--text-muted); }
+  .theme-note{ font-size:0.72rem; color:var(--text-muted); text-align:right; max-width:260px; }
+  .logo-block{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  .logo-chip{ background:#FFFFFF; border-radius:8px; padding:6px 10px; line-height:0; box-shadow:var(--shadow); }
+  .logo-chip img{ display:block; }
+
+  .tabs{ display:flex; gap:4px; margin:14px 0 0; }
+  .tab-btn{
+    appearance:none; border:none; background:transparent; cursor:pointer;
+    font-family:inherit; font-weight:700; font-size:0.86rem; color:var(--text-muted);
+    padding:10px 6px; border-bottom:3px solid transparent; letter-spacing:0.01em;
+  }
+  .tab-btn[aria-selected="true"]{ color:var(--brand-strong); border-bottom-color:var(--brand); }
+  .tab-btn + .tab-btn{ margin-left:18px; }
+
+  /* ===== Timer / milestone strip ===== */
+  .timerbar{
+    position:sticky; top:var(--topbar-h, 76px); z-index:29;
+    background:var(--navy-tint);
+    border-bottom:1px solid var(--border);
+    padding:12px 20px;
+    display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+  }
+  .clock-wrap{ display:flex; align-items:baseline; gap:10px; }
+  .clock{ font-family:'IBM Plex Mono',monospace; font-size:1.9rem; font-weight:600; letter-spacing:0.01em; font-variant-numeric: tabular-nums; }
+  .clock-label{ font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; }
+  .btn{
+    appearance:none; cursor:pointer; font-family:inherit; font-weight:700; font-size:0.82rem;
+    border-radius:8px; padding:9px 14px; border:1px solid transparent; letter-spacing:0.01em;
+    transition:filter .12s ease, transform .08s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--brand); color:var(--on-brand); }
+  .btn-primary:hover{ filter:brightness(1.06); }
+  .btn-ghost{ background:transparent; color:var(--text); border-color:var(--border); }
+  .btn-ghost:hover{ background:var(--surface-2); }
+  .btn-critical{ background:var(--critical); color:#fff; }
+  .btn-dark{ background:#2C3B44; color:#fff; border-color:#1B262D; }
+  .btn-dark:hover{ filter:brightness(1.15); }
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; }
+
+  .chip-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{
+    display:flex; align-items:center; gap:7px;
+    background:var(--surface); border:1px solid var(--border); border-radius:999px;
+    padding:6px 12px 6px 8px; font-size:0.78rem; font-weight:600;
+  }
+  .chip .dot{ width:9px; height:9px; border-radius:50%; background:var(--text-muted); flex:none; }
+  .chip[data-state="pending"] .dot{ background:var(--text-muted); }
+  .chip[data-state="ontime"] .dot{ background:var(--success); }
+  .chip[data-state="late"] .dot{ background:var(--critical); }
+  .chip .t{ font-family:'IBM Plex Mono',monospace; color:var(--text-muted); }
+
+  .score-dock{
+    display:flex; gap:16px; flex-wrap:wrap; align-items:center;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:7px 14px; font-size:0.76rem; font-weight:600; color:var(--text-muted);
+  }
+  .score-dock b{ color:var(--brand-strong); font-size:0.94rem; margin-left:5px; }
+
+  /* ===== Layout ===== */
+  main{ max-width:1180px; margin:0 auto; padding:22px 20px 80px; }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow); padding:20px 22px; margin-bottom:16px;
+  }
+  .card[id]{ scroll-margin-top:var(--sticky-offset, 160px); }
+  .field input, .field select, .field textarea,
+  .radio-pill label, .check-item, .scale-item{ scroll-margin-top:calc(var(--sticky-offset, 160px) + 8px); }
+  .card h2{ margin:0 0 4px; font-size:1.02rem; font-weight:800; }
+  .card .sub{ margin:0 0 14px; color:var(--text-muted); font-size:0.84rem; }
+  .section-label{ font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:var(--brand-strong); margin:0 0 10px; }
+
+  /* Milestone cards */
+  .milestone{
+    display:grid; grid-template-columns:auto 1fr auto; gap:14px 18px; align-items:center;
+    padding:16px 0; border-top:1px solid var(--border);
+  }
+  .milestone:first-of-type{ border-top:none; padding-top:2px; }
+  .milestone .num{
+    width:30px; height:30px; border-radius:50%; background:var(--surface-2); color:var(--text);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.86rem; flex:none;
+  }
+  .milestone .info strong{ display:block; font-size:0.95rem; }
+  .milestone .info span{ display:block; font-size:0.78rem; color:var(--text-muted); margin-top:2px; }
+  .milestone .status{ text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  .badge{ font-size:0.72rem; font-weight:800; padding:3px 9px; border-radius:6px; letter-spacing:0.02em; }
+  .badge.pending{ background:var(--surface-2); color:var(--text-muted); }
+  .badge.ontime{ background:var(--success-tint); color:var(--success); }
+  .badge.late{ background:var(--critical-tint); color:var(--critical); }
+  .marked-time{ font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--text-muted); }
+
+  details.ref{ border:1px solid var(--border); border-radius:12px; background:var(--surface-2); padding:2px 16px; margin-bottom:16px; }
+  details.ref summary{ cursor:pointer; padding:12px 0; font-weight:700; font-size:0.9rem; list-style:none; display:flex; align-items:center; gap:8px;}
+  details.ref summary::-webkit-details-marker{ display:none; }
+  details.ref summary:before{ content:"▸"; color:var(--brand); transition:transform .12s; }
+  details.ref[open] summary:before{ transform:rotate(90deg); }
+  details.ref .refbody{ padding:0 0 16px; font-size:0.85rem; color:var(--text); }
+
+  /* Form grid */
+  .grid{ display:grid; gap:14px; }
+  .grid.cols-2{ grid-template-columns:repeat(2,1fr); }
+  .grid.cols-3{ grid-template-columns:repeat(3,1fr); }
+  .grid.cols-4{ grid-template-columns:repeat(4,1fr); }
+  @media (max-width:720px){ .grid.cols-2, .grid.cols-3, .grid.cols-4{ grid-template-columns:1fr; } }
+
+  .field label{ display:block; font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:5px; }
+  .field input[type=text], .field input[type=number], .field input[type=date], .field input[type=time], .field input[type=email], .field input[type=url], .field select, .field textarea{
+    width:100%; font-family:inherit; font-size:0.9rem; padding:8px 10px; border-radius:8px;
+    border:1px solid var(--border); background:var(--surface); color:var(--text);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--brand); outline-offset:1px; }
+  .field textarea{ resize:vertical; min-height:78px; font-family:inherit; }
+  .field-inline-btn{ display:flex; gap:8px; align-items:flex-end; }
+  .field-inline-btn .field{ flex:1; }
+  .check-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px 14px; }
+  @media (max-width:600px){ .check-grid{ grid-template-columns:1fr; } }
+  .check-item{ display:flex; align-items:center; gap:8px; font-size:0.86rem; }
+  .check-item input{ accent-color:var(--brand); width:16px; height:16px; }
+
+  .radio-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .radio-pill{ position:relative; }
+  .radio-pill input{ position:absolute; opacity:0; }
+  .radio-pill label{
+    display:block; padding:6px 12px; border-radius:8px; border:1px solid var(--border);
+    font-size:0.82rem; cursor:pointer; background:var(--surface); color:var(--text); margin:0;
+  }
+  .radio-pill input:checked + label{ background:var(--brand); border-color:var(--brand); color:var(--on-brand); font-weight:700; }
+  .radio-pill input:focus-visible + label{ outline:2px solid var(--brand); outline-offset:1px; }
+
+  /* Scale widgets */
+  .scale-item{ padding:12px 0; border-top:1px solid var(--border); }
+  .scale-item:first-child{ border-top:none; padding-top:0; }
+  .scale-item .qlabel{ font-weight:700; font-size:0.88rem; margin-bottom:8px; }
+  .scoreboard{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    background:var(--brand-tint); border:1px solid var(--border); border-radius:10px;
+    padding:12px 16px; margin-bottom:14px;
+  }
+  .scoreboard .val{ font-family:'IBM Plex Mono',monospace; font-size:1.5rem; font-weight:700; color:var(--brand-strong); }
+  .interp{ margin-top:10px; padding:10px 12px; border-radius:8px; font-size:0.83rem; font-weight:600; }
+  .interp.flag{ background:var(--critical-tint); color:var(--critical); }
+  .interp.warn2{ background:var(--orange-tint); color:var(--orange); }
+  .interp.caution{ background:var(--warning-tint); color:var(--warning); }
+  .interp.ok{ background:var(--success-tint); color:var(--success); }
+  .interp.info{ background:var(--info-tint); color:var(--info); }
+
+  .triage-badge{ display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:0.86rem; padding:5px 12px; border-radius:999px; }
+  .triage-badge.azul{ background:var(--info-tint); color:var(--info); }
+  .triage-badge.verde{ background:var(--success-tint); color:var(--success); }
+  .triage-badge.amarillo{ background:var(--warning-tint); color:var(--warning); }
+  .triage-badge.naranja{ background:var(--orange-tint); color:var(--orange); }
+  .triage-badge.rojo{ background:var(--critical-tint); color:var(--critical); }
+
+  .status-banner{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    background:var(--success-tint); border:1px solid var(--success); border-radius:10px;
+    padding:12px 16px; margin-bottom:16px; font-weight:700; color:var(--success);
+  }
+  .status-banner .t{ font-family:'IBM Plex Mono',monospace; }
+  .alert-banner{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:var(--critical-tint); border:1px solid var(--critical); border-radius:10px;
+    padding:12px 16px; margin-bottom:16px; font-weight:700; color:var(--critical); font-size:0.9rem;
+  }
+  .pending-banner{
+    background:var(--warning-tint); border:1px dashed var(--warning); border-radius:10px;
+    padding:12px 14px; margin-bottom:14px; font-size:0.83rem; color:var(--warning); line-height:1.5;
+  }
+  .ext-callout{
+    display:flex; gap:14px; flex-wrap:wrap; background:var(--navy-tint); border:1px solid var(--border);
+    border-radius:10px; padding:12px 16px; margin:12px 0 4px;
+  }
+  .ext-item{ display:flex; flex-direction:column; gap:2px; }
+  .ext-item b{ font-family:'IBM Plex Mono',monospace; font-size:1.15rem; color:var(--brand-strong); }
+  .ext-item span{ font-size:0.76rem; color:var(--text-muted); }
+
+  /* Registro de casos */
+  .case-list{ display:flex; flex-direction:column; gap:8px; }
+  .case-item{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    border:1px solid var(--border); border-radius:10px; padding:11px 13px; background:var(--surface-2); }
+  .case-item .meta{ min-width:0; }
+  .case-item .meta b{ display:block; font-size:0.9rem; }
+  .case-item .meta span{ font-size:0.76rem; color:var(--text-muted); }
+  .case-item .acts{ display:flex; gap:7px; flex-wrap:wrap; }
+  .sync-pill{ display:inline-flex; align-items:center; gap:6px; font-size:0.74rem; font-weight:700;
+    padding:4px 10px; border-radius:999px; background:var(--surface-2); color:var(--text-muted); border:1px solid var(--border); }
+  .sync-pill.ok{ background:var(--success-tint); color:var(--success); border-color:var(--success); }
+  .sync-pill.warn{ background:var(--warning-tint); color:var(--warning); border-color:var(--warning); }
+
+  /* Roles grid */
+  .roles-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  @media (max-width:720px){ .roles-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .roles-grid{ grid-template-columns:1fr; } }
+  .role-chip{ background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-size:0.82rem; }
+
+  /* 5R chain */
+  .chain-5r{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+  @media (max-width:820px){ .chain-5r{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .chain-5r{ grid-template-columns:1fr; } }
+  .chain-step{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:left; }
+  .chain-step .n{ font-size:0.72rem; font-weight:800; color:var(--brand-strong); text-transform:uppercase; letter-spacing:0.05em; }
+  .chain-step b{ display:block; font-size:0.98rem; margin:3px 0 5px; }
+  .chain-step span{ font-size:0.78rem; color:var(--text-muted); }
+
+  .sbar-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  @media (max-width:760px){ .sbar-grid{ grid-template-columns:1fr; } }
+  .sbar-card{ border:1px solid var(--border); border-radius:10px; padding:12px 14px; background:var(--surface-2); }
+  .sbar-card .letter{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--brand); color:var(--on-brand); font-weight:800; font-size:0.85rem; margin-right:8px; }
+  .sbar-card h3{ display:flex; align-items:center; margin:0 0 8px; font-size:0.92rem; }
+
+  /* Evaluación inicial/final */
+  .eval-table{ overflow-x:auto; }
+  .eval-table table{ width:100%; border-collapse:collapse; min-width:520px; }
+  .eval-table th, .eval-table td{ padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; }
+  .eval-table th{ font-size:0.74rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); }
+  .eval-table input{ width:100%; font-family:inherit; font-size:0.88rem; padding:6px 8px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); }
+
+  /* Escalation buttons */
+  .escalate-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .escalate-card{ flex:1 1 240px; border:1px solid var(--border); border-radius:10px; padding:14px; background:var(--surface-2); }
+  .escalate-card h3{ margin:0 0 6px; font-size:0.94rem; }
+  .escalate-card p{ margin:0 0 10px; font-size:0.8rem; color:var(--text-muted); }
+  .escalate-stamp{ margin-top:8px; font-size:0.78rem; color:var(--brand-strong); font-family:'IBM Plex Mono',monospace; }
+
+  /* RES-Q-style layout with side nav */
+  .resq-shell{ display:grid; grid-template-columns:210px 1fr; gap:20px; align-items:start; }
+  @media (max-width:860px){ .resq-shell{ grid-template-columns:1fr; } .resq-nav{ display:none; } }
+  .resq-nav{ position:sticky; top:calc(var(--sticky-offset, 150px) + 12px); display:flex; flex-direction:column; gap:2px; }
+  .resq-nav a{ text-decoration:none; color:var(--text-muted); font-size:0.82rem; padding:7px 10px; border-radius:8px; font-weight:600; }
+  .resq-nav a:hover{ background:var(--surface-2); color:var(--text); }
+
+  .export-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .summary-pre{ white-space:pre-wrap; font-family:'IBM Plex Mono',monospace; font-size:0.8rem; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:14px; max-height:420px; overflow:auto; }
+  .privacy-note{ font-size:0.76rem; color:var(--text-muted); background:var(--surface-2); border:1px dashed var(--border); border-radius:8px; padding:10px 12px; margin-top:6px; }
+
+  footer{ text-align:center; padding:26px 20px 40px; color:var(--text-muted); font-size:0.76rem; }
+
+  #summaryPrintArea{ display:none; }
+  @media print{
+    .topbar, .timerbar, .tabs, .resq-nav, .btn, footer, details.ref{ display:none !important; }
+    body.printing main > *:not(#summaryPrintArea){ display:none !important; }
+    #summaryPrintArea{ display:block !important; }
+    body{ background:#fff; color:#000; }
+  }
+
+  /* ===== Avisos y confirmación propios ===== */
+  #toastHost{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:120;
+    display:flex; flex-direction:column; gap:8px; align-items:center; width:calc(100% - 28px); max-width:460px; pointer-events:none; }
+  .toast{ background:var(--navy); color:#fff; border-radius:10px; padding:12px 16px; font-size:0.86rem;
+    font-weight:600; box-shadow:0 8px 26px rgba(0,0,0,.28); width:100%; }
+  :root[data-theme="dark"] .toast{ background:#2C3B44; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .toast{ background:#2C3B44; } }
+  .toast.ok{ background:var(--brand-strong); }
+  .toast.warn{ background:var(--critical); }
+
+  #modalHost{ position:fixed; inset:0; z-index:130; background:rgba(10,20,22,.55);
+    display:none; align-items:center; justify-content:center; padding:18px; }
+  #modalHost.open{ display:flex; }
+  .modal{ background:var(--surface); color:var(--text); border-radius:14px; border:1px solid var(--border);
+    max-width:420px; width:100%; padding:20px; box-shadow:0 20px 50px rgba(0,0,0,.3); }
+  .modal h3{ margin:0 0 8px; font-size:1.02rem; }
+  .modal p{ margin:0 0 16px; font-size:0.88rem; color:var(--text-muted); line-height:1.5; }
+  .modal .acts{ display:flex; gap:9px; justify-content:flex-end; flex-wrap:wrap; }
+  .modal .acts .btn{ min-height:42px; }
+
+  a.btn{ display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
+
+  :focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+
+  /* ===== Theme switch ===== */
+  .theme-switch{ display:flex; gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden; flex:none; }
+  .theme-switch button{
+    appearance:none; border:none; cursor:pointer; font-family:inherit; font-weight:700;
+    font-size:0.72rem; padding:7px 11px; background:var(--surface); color:var(--text-muted);
+    border-left:1px solid var(--border); min-height:34px;
+  }
+  .theme-switch button:first-child{ border-left:none; }
+  .theme-switch button[aria-pressed="true"]{ background:var(--brand); color:var(--on-brand); }
+
+  .timer-main{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .lbl-short{ display:none; }
+
+  /* ===== Collapsible sections ===== */
+  .section-label.collapsible{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    cursor:pointer; user-select:none; margin:0; padding:4px 0; min-height:40px; width:100%;
+  }
+  .section-label.collapsible::after{
+    content:"▾"; font-size:0.95rem; color:var(--text-muted); transition:transform .15s ease; flex:none;
+  }
+  .card.collapsed .section-label.collapsible::after{ transform:rotate(-90deg); }
+  .card.collapsed > *:not(.section-label){ display:none !important; }
+  .collapse-tools{ display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+
+  .mobile-jump{ display:none; margin-bottom:14px; }
+  .mobile-jump select{
+    width:100%; font-family:inherit; font-size:16px; padding:11px 12px; border-radius:10px;
+    border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600;
+  }
+
+  .share-row{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  /* ===== Mobile / tablet layout ===== */
+  @media (max-width:860px){
+    body{ -webkit-text-size-adjust:100%; }
+    main{ padding:14px 12px 90px; }
+    .card{ padding:15px 14px; border-radius:12px; }
+    .topbar{ padding:9px 12px 0; }
+    .topbar-row{ align-items:center; gap:10px; }
+    .brandblock h1{ font-size:1.05rem; }
+    .brandblock p, .theme-note, .logo-block{ display:none; }
+    .topbar-row{ flex-wrap:nowrap; justify-content:space-between; }
+    .theme-switch button{ font-size:0.68rem; padding:6px 9px; min-height:32px; }
+    .tabs{ margin-top:8px; }
+    .tab-btn{ font-size:0.82rem; padding:9px 4px; }
+    .tab-btn + .tab-btn{ margin-left:14px; }
+
+    .timerbar{ flex-direction:column; flex-wrap:nowrap; align-items:stretch; gap:8px; padding:8px 12px; min-width:0; }
+    .timer-main{ gap:9px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; min-width:0; }
+    .timer-main .btn, .timer-main .clock-wrap{ flex:none; }
+    .clock-label{ display:none; }
+    .clock{ font-size:1.35rem; }
+    .lbl-full{ display:none; }
+    .lbl-short{ display:inline; }
+    .chip-row{ display:none; }
+    .score-dock{ overflow-x:auto; flex-wrap:nowrap; white-space:nowrap; gap:13px; padding:6px 11px; min-width:0; }
+    .score-dock span{ flex:none; }
+
+    .field input[type=text], .field input[type=number], .field input[type=date],
+    .field input[type=time], .field input[type=email], .field input[type=url], .field select, .field textarea,
+    .mobile-jump select{ font-size:16px; padding:11px 12px; min-height:44px; }
+    .tab-btn{ min-height:44px; }
+    .radio-pill label{ min-height:44px; display:flex; align-items:center; font-size:0.88rem; padding:9px 13px; }
+    .radio-row{ gap:8px; }
+    .check-item{ min-height:44px; font-size:0.9rem; }
+    .check-item input{ width:22px; height:22px; flex:none; }
+    .btn{ min-height:42px; }
+
+    .grid.cols-2, .grid.cols-3, .grid.cols-4, .check-grid, .roles-grid, .sbar-grid{ grid-template-columns:1fr; }
+    .mobile-jump{ display:block; }
+    .resq-shell{ grid-template-columns:1fr; }
+    .resq-nav{ display:none; }
+    .milestone{ grid-template-columns:auto 1fr; gap:10px 12px; }
+    .milestone .status{ grid-column:1 / -1; flex-direction:row; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .scoreboard{ padding:11px 13px; }
+    .scoreboard .val{ font-size:1.35rem; }
+    .export-row .btn, .share-row .btn, .collapse-tools .btn{ flex:1 1 auto; }
+    .summary-pre{ font-size:0.72rem; max-height:340px; }
+    .eval-table table{ min-width:460px; }
+    footer{ padding:20px 14px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-row">
+    <div class="brandblock">
+      <h1>Equipo de Respuesta Rápida (ERR)</h1>
+      <p>Detección temprana y activación previa — Hospital CIMA</p>
+    </div>
+    <div class="logo-block">
+      <div class="logo-chip"><img alt="Hospital CIMA" src="data:image/png;base64,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" height="34"></div>
+      <div class="theme-note">Datos guardados en este dispositivo y en el servidor del hospital</div>
+    </div>
+    <div class="theme-switch" role="group" aria-label="Tema de la página">
+      <button type="button" data-theme-set="light" onclick="setTheme('light')" title="Fondo blanco">Blanco</button>
+      <button type="button" data-theme-set="dark" onclick="setTheme('dark')" title="Fondo negro">Negro</button>
+      <button type="button" data-theme-set="auto" onclick="setTheme('auto')" title="Según el sistema">Auto</button>
+    </div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab-btn" id="tabbtn-activacion" role="tab" aria-selected="true" onclick="showTab('activacion')">Activación &amp; escalas</button>
+    <button class="tab-btn" id="tabbtn-registro" role="tab" aria-selected="false" onclick="showTab('registro')">Registro ERR</button>
+  </div>
+</header>
+
+<div class="timerbar">
+  <div class="timer-main">
+    <div class="clock-wrap">
+      <div>
+        <div class="clock-label">Tiempo desde el llamado</div>
+        <div class="clock mono" id="clockDisplay">00:00</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="startBtn" onclick="startClock()"><span class="lbl-full">Llamado ERR — iniciar reloj</span><span class="lbl-short">Iniciar</span></button>
+    <button class="btn btn-dark" id="finishBtn" onclick="finishCase()" disabled><span class="lbl-full">Concluir evento</span><span class="lbl-short">Concluir</span></button>
+    <button class="btn btn-ghost" onclick="resetAll()"><span class="lbl-full">Nuevo caso</span><span class="lbl-short">Nuevo</span></button>
+  </div>
+  <div class="chip-row" id="chipRow"></div>
+  <div class="score-dock" id="scoreDock">
+    <span>NEWS 2 <b class="mono" id="dockNews2">0</b></span>
+    <span>Triage <b class="mono" id="dockTriage">—</b></span>
+    <span>PEWS 2 <b class="mono" id="dockPews2">0</b></span>
+  </div>
+</div>
+
+<main>
+  <!-- ================= TAB 1: ACTIVACIÓN & ESCALAS ================= -->
+  <section class="tab-panel active" id="tab-activacion">
+
+    <div class="status-banner" id="caseStatusBanner" style="display:none;"></div>
+
+    <div class="card" id="act-encabezado">
+      <div class="section-label">Activación del ERR</div>
+      <div class="grid cols-3">
+        <div class="field"><label>¿Quién activa?</label><input type="text" id="activadoPor" placeholder="Nombre de quien activa"></div>
+        <div class="field"><label>Rol de quien activa</label><input type="text" id="rolActiva" placeholder="p. ej. Enfermera asignada"></div>
+        <div class="field"><label>Habitación / ubicación</label><input type="text" id="habitacion" placeholder="Núm. de habitación"></div>
+      </div>
+      <div class="radio-row" style="margin-top:12px;" id="cuneroRow"></div>
+      <div id="extNormal" class="ext-callout">
+        <div class="ext-item"><b>Ext. 1800</b><span>Médico intensivista en turno — activación estándar</span></div>
+        <div class="ext-item"><b>Ext. 1400</b><span>Urgenciólogo — respaldo si el intensivista no puede acudir</span></div>
+      </div>
+      <div id="extCunero" class="ext-callout" style="display:none;">
+        <div class="ext-item"><b>Ext. 1401</b><span>Urgenciólogo en turno — cunero fisiológico / recién nacidos</span></div>
+        <div class="ext-item"><b>+ Llamar</b><span>Coordinador de área e informar al médico tratante</span></div>
+      </div>
+      <p class="sub" style="margin-top:10px;">Tiempo de respuesta objetivo: <b>menos de 5 minutos</b> desde la activación, para el ERR, los servicios de apoyo diagnóstico y la supervisora de enfermería.</p>
+    </div>
+
+    <div class="card" id="act-criterios">
+      <div class="section-label">Criterios de activación directa (Anexo 2)</div>
+      <p class="sub">Cualquiera de estos criterios activa el ERR de inmediato, sin necesidad de calcular NEWS 2 / PEWS 2 primero.</p>
+      <div class="alert-banner" id="criteriosBanner" style="display:none;">
+        ⚠ Criterio(s) de activación directa presente(s) — active el ERR ahora: ext. 1800 (o 1401 en cunero fisiológico).
+      </div>
+      <div class="check-grid" id="criteriosGrid"></div>
+    </div>
+
+    <div class="card" id="act-tiempos">
+      <div class="section-label">Tiempo de respuesta (&lt; 5 minutos)</div>
+      <p class="sub">Marca cada equipo conforme llega. El reloj corre desde el llamado.</p>
+      <div id="milestoneList"></div>
+    </div>
+
+    <div class="card" id="act-news2">
+      <div class="section-label">NEWS 2 — adultos (≥ 18 años)</div>
+      <div class="privacy-note">
+        <b>Nota sobre el documento fuente (confirmado con el hospital):</b> en la tabla de "Oxígeno suplementario" del PR-ENF/GRL-015, la columna derecha repite los mismos valores que la izquierda en vez de tener una escala distinta — se usa una sola escala de flujo de O2. La interpretación por triage usa la tabla del Anexo 3.
+      </div>
+      <div class="scoreboard">
+        <div>Puntaje total NEWS 2 <span class="val mono" id="news2Total">0</span></div>
+        <div id="news2TriageBadge"><span class="triage-badge azul">Triage Azul</span></div>
+      </div>
+      <div id="news2Items"></div>
+      <div class="interp ok" id="news2Interp">Selecciona los parámetros para calcular.</div>
+      <div class="export-row">
+        <button class="btn btn-ghost" onclick="resetNews2()">Limpiar NEWS 2</button>
+        <button class="btn btn-ghost" onclick="copyNews2()">Copiar puntaje</button>
+      </div>
+    </div>
+
+    <div class="card" id="act-pews2">
+      <div class="section-label">PEWS 2 — pediátrico (recién nacidos a 17 años)</div>
+      <p class="sub">Selecciona primero el grupo de edad: la frecuencia cardiaca, respiratoria y presión arterial usan tablas de corte distintas por edad (Anexo 7).</p>
+      <div class="field" style="max-width:320px;">
+        <label>Grupo de edad</label>
+        <select id="pewsGrupoEdad" onchange="onPewsAgeChange()">
+          <option value="">Selecciona…</option>
+          <option value="0-11m">0 a 11 meses</option>
+          <option value="1-2a">1 a 2 años</option>
+          <option value="2-4a">2 a 4 años (preescolar)</option>
+          <option value="5-10a">5 a 10 años (escolar)</option>
+          <option value="11-17a">11 a 17 años (adolescente)</option>
+        </select>
+      </div>
+      <div id="pewsAgeFields" class="pending-banner" style="margin-top:12px;">Selecciona un grupo de edad para capturar frecuencia cardiaca, respiratoria y presión arterial.</div>
+
+      <div class="scale-item">
+        <div class="qlabel">Estado de conciencia</div>
+        <div class="radio-row" id="pewsConcienciaRow"></div>
+      </div>
+      <div class="scale-item">
+        <div class="qlabel">Llenado capilar</div>
+        <div class="radio-row" id="pewsCapilarRow"></div>
+      </div>
+      <div class="scale-item">
+        <div class="qlabel">Saturación arterial de oxígeno (SpO2, %)</div>
+        <div class="radio-row" id="pewsSpo2Row"></div>
+      </div>
+      <div class="scale-item">
+        <div class="qlabel">Uso de oxígeno suplementario</div>
+        <div class="radio-row" id="pewsO2Row"></div>
+      </div>
+      <div class="scale-item">
+        <div class="qlabel">Temperatura (°C)</div>
+        <div class="radio-row" id="pewsTempRow"></div>
+      </div>
+
+      <div class="scoreboard" style="margin-top:6px;">
+        <div>Puntaje total PEWS 2 <span class="val mono" id="pewsTotal">0</span></div>
+        <div id="pewsRangoBadge"><span class="triage-badge verde">Bajo</span></div>
+      </div>
+      <div class="interp ok" id="pewsInterp">Selecciona el grupo de edad y los parámetros para calcular.</div>
+      <p class="privacy-note">Nota: la fila de 5–6 puntos del Anexo 7 no trae un nombre de categoría en el documento (solo color e indicaciones) — se muestra sin etiqueta de rango. Además, la tabla de "uso de O2" es simétrica en ambos lados (mismos L/min = mismo puntaje), como la de NEWS 2, así que aquí se usa una sola escala por flujo.</p>
+      <div class="export-row">
+        <button class="btn btn-ghost" onclick="resetPews()">Limpiar PEWS 2</button>
+      </div>
+    </div>
+
+    <div class="card" id="act-pews2-subj">
+      <div class="section-label">PEWS 2 — valoración subjetiva (Anexo 8)</div>
+      <p class="sub">Escala cualitativa alternativa/complementaria, útil cuando no se pueden tomar todos los parámetros numéricos. El documento no define categorías de riesgo para el total — úsala como apoyo junto con el PEWS 2 numérico y el criterio clínico.</p>
+      <div id="pewsSubjItems"></div>
+      <div class="scoreboard">
+        <div>Puntaje total (0–15) <span class="val mono" id="pewsSubjTotal">0</span></div>
+      </div>
+      <div class="export-row">
+        <button class="btn btn-ghost" onclick="resetPewsSubj()">Limpiar valoración subjetiva</button>
+      </div>
+    </div>
+
+    <details class="ref" id="act-guia">
+      <summary>Guía del evento: liderazgo, roles, 5R, SBAR y escalamiento</summary>
+      <div class="refbody">
+        <h3 style="margin:4px 0 8px;">Liderazgo del evento</h3>
+        <p class="sub" style="margin:0 0 10px;">Por defecto lidera el <b>médico de terapia intensiva en turno</b>. Si no está presente, el médico de hospitalización y/o urgencias asume el rol hasta que llegue el intensivista. En cunero fisiológico, el <b>urgenciólogo</b> lidera y dirige la terapéutica manteniendo comunicación con el médico tratante; en recién nacidos puede escalar a neonatólogo/pediatra.</p>
+
+        <h3 style="margin:14px 0 8px;">Roles del equipo</h3>
+        <div class="roles-grid" id="rolesGrid"></div>
+
+        <h3 style="margin:16px 0 8px;">Cadena de supervivencia intrahospitalaria — 5R</h3>
+        <div class="chain-5r" id="chain5r"></div>
+
+        <h3 style="margin:16px 0 8px;">Modelo de comunicación SBAR</h3>
+        <div class="sbar-grid" id="sbarRefGrid"></div>
+
+        <h3 style="margin:16px 0 8px;">Escalamiento a Código de Emergencia</h3>
+        <p class="sub" style="margin:0;">Si durante la evaluación o intervención del ERR se identifican criterios compatibles con un código de emergencia formal, el líder del ERR activa el código correspondiente: <b>Código Ictus</b>, <b>SICA</b> (síndrome coronario agudo) o <b>Código Azul</b>. Registra la decisión en la pestaña "Registro ERR" → sección "Escalamiento".</p>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- ================= TAB 2: REGISTRO ERR (Anexo 6) ================= -->
+  <section class="tab-panel" id="tab-registro">
+
+    <div class="mobile-jump">
+      <select id="jumpSelect" onchange="jumpToSection(this.value)">
+        <option value="">Ir a sección…</option>
+        <option value="sec-encabezado">Encabezado</option>
+        <option value="sec-motivo">Motivo de activación</option>
+        <option value="sec-intervenciones">Intervenciones</option>
+        <option value="sec-personal">Personal involucrado</option>
+        <option value="sec-sbar">SBAR</option>
+        <option value="sec-evaluacion">Evaluación inicial / final</option>
+        <option value="sec-reporte">Reporte final</option>
+        <option value="sec-resultados">Resultados</option>
+        <option value="sec-retro">Retroalimentación</option>
+        <option value="sec-escalamiento">Escalamiento</option>
+        <option value="sec-guardar">Guardar y exportar</option>
+        <option value="sec-casos">Casos guardados</option>
+        <option value="sec-qr">Acceso rápido (QR)</option>
+      </select>
+    </div>
+
+    <div class="resq-shell">
+      <nav class="resq-nav">
+        <a href="#sec-encabezado" onclick="jumpToSection('sec-encabezado');return false;">Encabezado</a>
+        <a href="#sec-motivo" onclick="jumpToSection('sec-motivo');return false;">Motivo de activación</a>
+        <a href="#sec-intervenciones" onclick="jumpToSection('sec-intervenciones');return false;">Intervenciones</a>
+        <a href="#sec-personal" onclick="jumpToSection('sec-personal');return false;">Personal involucrado</a>
+        <a href="#sec-sbar" onclick="jumpToSection('sec-sbar');return false;">SBAR</a>
+        <a href="#sec-evaluacion" onclick="jumpToSection('sec-evaluacion');return false;">Evaluación inicial/final</a>
+        <a href="#sec-reporte" onclick="jumpToSection('sec-reporte');return false;">Reporte final</a>
+        <a href="#sec-resultados" onclick="jumpToSection('sec-resultados');return false;">Resultados</a>
+        <a href="#sec-retro" onclick="jumpToSection('sec-retro');return false;">Retroalimentación</a>
+        <a href="#sec-escalamiento" onclick="jumpToSection('sec-escalamiento');return false;">Escalamiento</a>
+        <a href="#sec-guardar" onclick="jumpToSection('sec-guardar');return false;">Guardar y exportar</a>
+        <a href="#sec-casos" onclick="jumpToSection('sec-casos');return false;">Casos guardados</a>
+        <a href="#sec-qr" onclick="jumpToSection('sec-qr');return false;">Acceso rápido (QR)</a>
+      </nav>
+
+      <div>
+        <div class="card" id="sec-encabezado">
+          <div class="section-label">Encabezado (Anexo 6)</div>
+          <div class="grid cols-3">
+            <div class="field"><label>Folio</label><input type="text" id="f_caseid" placeholder="Folio del caso"></div>
+            <div class="field"><label>Fecha</label><input type="date" id="f_fecha"></div>
+            <div class="field"><label>Habitación</label><input type="text" id="f_habitacion"></div>
+            <div class="field-inline-btn"><div class="field"><label>Hora de llamado</label><input type="time" id="f_horaLlamado"></div><button class="btn btn-ghost" onclick="setNow('f_horaLlamado')">Ahora</button></div>
+            <div class="field-inline-btn"><div class="field"><label>Hora de llegada</label><input type="time" id="f_horaLlegada"></div><button class="btn btn-ghost" onclick="setNow('f_horaLlegada')">Ahora</button></div>
+            <div class="field-inline-btn"><div class="field"><label>Hora de concluido</label><input type="time" id="f_horaConcluido"></div><button class="btn btn-ghost" onclick="setNow('f_horaConcluido')">Ahora</button></div>
+          </div>
+          <div class="grid cols-3" style="margin-top:14px;">
+            <div class="field"><label>Alergias</label><input type="text" id="f_alergias" placeholder="Ninguna conocida / especificar"></div>
+            <div class="field"><label>APP (antecedentes patológicos)</label><input type="text" id="f_app"></div>
+            <div class="field"><label>Dx médico</label><input type="text" id="f_dxMedico"></div>
+          </div>
+        </div>
+
+        <div class="card" id="sec-motivo">
+          <div class="section-label">Motivo de activación</div>
+          <div class="check-grid" id="motivoGrid"></div>
+          <div class="field" style="margin-top:12px;"><label>Otros (especificar)</label><input type="text" id="motivoOtros"></div>
+        </div>
+
+        <div class="card" id="sec-intervenciones">
+          <div class="section-label">Recomendaciones / intervenciones</div>
+          <p class="sub" style="margin:0 0 6px;">Vía aérea y ventilación</p>
+          <div class="check-grid" id="viaAereaGrid"></div>
+          <p class="sub" style="margin:16px 0 6px;">Circulación</p>
+          <div class="check-grid" id="circulacionGrid"></div>
+          <div class="grid cols-2" style="margin-top:16px;">
+            <div class="field"><label>Medicamentos</label><textarea id="f_medicamentos" placeholder="Nombre, dosis, vía"></textarea></div>
+            <div class="field"><label>Otras intervenciones</label><textarea id="f_otrasIntervenciones"></textarea></div>
+          </div>
+        </div>
+
+        <div class="card" id="sec-personal">
+          <div class="section-label">Personal involucrado</div>
+          <div class="grid cols-3">
+            <div class="field"><label>Enf. asignada</label><input type="text" id="p_enfAsignada"></div>
+            <div class="field"><label>Médico de hospitalización</label><input type="text" id="p_medHospitalizacion"></div>
+            <div class="field"><label>Jefe de piso</label><input type="text" id="p_jefePiso"></div>
+            <div class="field"><label>Médico intensivista</label><input type="text" id="p_medIntensivista"></div>
+            <div class="field"><label>Enf. de UTI</label><input type="text" id="p_enfUti"></div>
+            <div class="field"><label>Supervisora</label><input type="text" id="p_supervisora"></div>
+            <div class="field"><label>Médico tratante</label><input type="text" id="p_medTratante"></div>
+          </div>
+        </div>
+
+        <div class="card" id="sec-sbar">
+          <div class="section-label">SBAR narrativo</div>
+          <div class="sbar-grid">
+            <div class="sbar-card"><h3><span class="letter">S</span>Situación</h3><div class="field"><label>¿Qué pasa con el paciente? ¿Cuál fue el motivo de activación?</label><textarea id="sbar_s"></textarea></div></div>
+            <div class="sbar-card"><h3><span class="letter">B</span>Antecedentes</h3><div class="field"><label>¿Qué ha ocurrido desde su ingreso?</label><textarea id="sbar_b"></textarea></div></div>
+            <div class="sbar-card"><h3><span class="letter">A</span>Evaluación</h3><div class="field"><label>¿Qué compromete la vida del paciente?</label><textarea id="sbar_a"></textarea></div></div>
+            <div class="sbar-card"><h3><span class="letter">R</span>Recomendación</h3><div class="field"><label>¿Qué hacer para corregir el problema?</label><textarea id="sbar_r"></textarea></div></div>
+          </div>
+          <p class="privacy-note">El Anexo 6 original solo lista campos de texto para "Situación" y "Antecedentes"; se agregaron también "Evaluación" y "Recomendación" para capturar el modelo SBAR completo tal como se describe en el cuerpo del documento. Confirma si esto es lo que quieres conservar.</p>
+        </div>
+
+        <div class="card" id="sec-evaluacion">
+          <div class="section-label">Evaluación inicial y evaluación final</div>
+          <div class="eval-table">
+            <table>
+              <thead><tr><th></th><th>TA (mmHg)</th><th>FC (lpm)</th><th>FR (rpm)</th><th>Temp (°C)</th><th>SpO2 (%)</th><th>Glasgow</th></tr></thead>
+              <tbody>
+                <tr>
+                  <th>Inicial</th>
+                  <td><input type="text" id="ei_ta" placeholder="120/80"></td>
+                  <td><input type="number" id="ei_fc"></td>
+                  <td><input type="number" id="ei_fr"></td>
+                  <td><input type="number" step="0.1" id="ei_temp"></td>
+                  <td><input type="number" id="ei_spo2"></td>
+                  <td><input type="number" min="3" max="15" id="ei_glasgow"></td>
+                </tr>
+                <tr>
+                  <th>Final</th>
+                  <td><input type="text" id="ef_ta" placeholder="120/80"></td>
+                  <td><input type="number" id="ef_fc"></td>
+                  <td><input type="number" id="ef_fr"></td>
+                  <td><input type="number" step="0.1" id="ef_temp"></td>
+                  <td><input type="number" id="ef_spo2"></td>
+                  <td><input type="number" min="3" max="15" id="ef_glasgow"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" id="sec-reporte">
+          <div class="section-label">Reporte final</div>
+          <div class="field"><textarea id="f_reporteFinal" style="min-height:120px;" placeholder="Resumen narrativo del evento"></textarea></div>
+        </div>
+
+        <div class="card" id="sec-resultados">
+          <div class="section-label">Resultados</div>
+          <div class="radio-row" id="resultadosRow"></div>
+          <div class="field" style="margin-top:12px;"><label>Si "Otros" — especificar</label><input type="text" id="resultadosOtros"></div>
+        </div>
+
+        <div class="card" id="sec-retro">
+          <div class="section-label">Retroalimentación</div>
+          <p class="sub">Fase "Repetir" de la cadena 5R: revisar las últimas 4 acciones (Revisar, Reconocer, Reportar, Responder) para identificar fallas y generar una estrategia de mejora.</p>
+          <div class="grid cols-2">
+            <div class="field"><label>¿Se realizó la retroalimentación?</label>
+              <div class="radio-row" id="retroRealizadaRow"></div>
+            </div>
+            <div class="field"><label>Nombre y firma de quien realiza el reporte</label><input type="text" id="f_firmaReporte" placeholder="Nombre completo"></div>
+          </div>
+        </div>
+
+        <div class="card" id="sec-escalamiento">
+          <div class="section-label">Escalamiento a Código de Emergencia</div>
+          <p class="sub">Si se identifican criterios compatibles, el líder del ERR activa el código correspondiente.</p>
+          <div class="escalate-row">
+            <div class="escalate-card">
+              <h3>Código Ictus</h3>
+              <p>Sospecha de evento vascular cerebral (déficit neurológico agudo).</p>
+              <div class="field" style="margin-bottom:8px;"><label>Enlace de la app de Código Ictus (opcional)</label><input type="url" id="urlIctus" placeholder="https://…" onchange="saveEscalationLinks()"></div>
+              <button class="btn btn-critical" onclick="marcarEscalamiento('ictus')">Marcar escalamiento a Código Ictus</button>
+              <div class="escalate-stamp" id="stampIctus"></div>
+            </div>
+            <div class="escalate-card">
+              <h3>SICA</h3>
+              <p>Síndrome coronario agudo (dolor torácico isquémico, cambios en ECG).</p>
+              <button class="btn btn-critical" onclick="marcarEscalamiento('sica')">Marcar escalamiento a SICA</button>
+              <div class="escalate-stamp" id="stampSica"></div>
+            </div>
+            <div class="escalate-card">
+              <h3>Código Azul</h3>
+              <p>Paro cardiorrespiratorio — inicio de RCP/ACLS.</p>
+              <div class="field" style="margin-bottom:8px;"><label>Enlace de la app de Código Azul (opcional)</label><input type="url" id="urlAzul" placeholder="https://…" onchange="saveEscalationLinks()"></div>
+              <button class="btn btn-critical" onclick="marcarEscalamiento('azul')">Marcar escalamiento a Código Azul</button>
+              <div class="escalate-stamp" id="stampAzul"></div>
+            </div>
+          </div>
+          <p class="privacy-note">Los enlaces son opcionales — si los llenas, el botón también abre esa app en una pestaña nueva. Aún no tenemos las URL de producción de Código Ictus / Código Azul en este hospital; el usuario puede pegarlas aquí cuando las tenga.</p>
+        </div>
+
+        <div class="card" id="sec-guardar">
+          <div class="section-label">Guardar y exportar</div>
+          <div class="grid cols-2">
+            <div class="field"><label>Capturó (nombre)</label><input type="text" id="capturadoPor"></div>
+            <div class="field"><label>Estado del caso</label><div id="estadoCasoDisplay" class="sub" style="margin:0;">En curso</div></div>
+          </div>
+          <div class="export-row">
+            <button class="btn btn-primary" onclick="saveCaseLocal()">Guardar en este equipo</button>
+            <button class="btn btn-primary" id="saveCloudBtn" onclick="saveCaseToCloud()">Guardar en el servidor</button>
+            <span class="sync-pill" id="syncPill">—</span>
+          </div>
+          <div class="export-row">
+            <button class="btn btn-ghost" onclick="generateSummary()">Ver informe</button>
+            <button class="btn btn-ghost" onclick="copyReport()">Copiar informe</button>
+            <button class="btn btn-ghost" onclick="downloadReport()">Descargar informe</button>
+            <button class="btn btn-ghost" onclick="printReport()">Imprimir informe</button>
+          </div>
+          <div id="summaryPanel" style="display:none; margin-top:14px;">
+            <pre class="summary-pre" id="summaryText"></pre>
+          </div>
+
+          <p class="sub" style="margin-top:18px;">Enviar por correo</p>
+          <div class="grid cols-3">
+            <div class="field"><label>Para</label><input type="email" id="mailTo" placeholder="jefatura@hospitalcima.com" oninput="saveMailPrefs()"></div>
+            <div class="field"><label>CC</label><input type="email" id="mailCc" oninput="saveMailPrefs()"></div>
+            <div class="field"><label>Asunto</label><input type="text" id="mailSubject"></div>
+          </div>
+          <div class="export-row">
+            <a class="btn btn-primary" id="mailLink" href="mailto:" onclick="sendReportByMail();return false;">Abrir en mi correo</a>
+          </div>
+          <p class="sub mono" id="mailStatus" style="margin-top:8px;"></p>
+
+          <p class="sub" style="margin-top:18px;">Borrador local (opcional)</p>
+          <div class="check-item"><input type="checkbox" id="draftToggle" onchange="toggleDraft()"><label for="draftToggle">Guardar borrador automático en este dispositivo mientras capturo</label></div>
+          <p class="sub mono" id="draftStatus"></p>
+        </div>
+
+        <div class="card" id="sec-casos">
+          <div class="section-label">Casos guardados</div>
+          <div class="case-list" id="caseList"></div>
+          <div class="export-row" style="margin-top:12px;">
+            <button class="btn btn-ghost" onclick="purgeHistory()">Borrar historial de este equipo</button>
+          </div>
+        </div>
+
+        <div class="card" id="sec-qr">
+          <div class="section-label">Acceso rápido (QR)</div>
+          <p class="sub">Comparte este código para que cualquier equipo del hospital abra la app directamente.</p>
+          <img id="qrImg" width="160" height="160" alt="Código QR de acceso" style="border-radius:10px; border:1px solid var(--border); background:#fff; padding:8px;">
+          <div class="share-row" style="margin-top:12px;">
+            <button class="btn btn-primary" onclick="printQR()">Imprimir cartel</button>
+            <button class="btn btn-ghost" onclick="sharePage()">Compartir enlace</button>
+            <button class="btn btn-ghost" onclick="copyLink()">Copiar enlace</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Hospital CIMA — El Corazón Médico de Sonora · Equipo de Respuesta Rápida (ERR), basado en PR-ENF/GRL-015 v6.
+  Esta app no reemplaza el criterio clínico del equipo tratante.
+</footer>
+
+<div id="toastHost"></div>
+<div id="modalHost">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="modalTitle">Confirmar</h3>
+    <p id="modalBody"></p>
+    <div class="acts">
+      <button class="btn btn-ghost" id="modalNo">Cancelar</button>
+      <button class="btn btn-critical" id="modalYes">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div id="summaryPrintArea"></div>
+
+<script>
+/* ---------------- Avisos y confirmación ---------------- */
+function toast(msg, kind){
+  const host = document.getElementById('toastHost');
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  host.appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+let modalResolve = null;
+function askConfirm(title, body, okLabel){
+  return new Promise(resolve => {
+    modalResolve = resolve;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalBody').textContent = body || '';
+    document.getElementById('modalYes').textContent = okLabel || 'Confirmar';
+    document.getElementById('modalHost').classList.add('open');
+    document.getElementById('modalYes').focus();
+  });
+}
+function closeModal(answer){
+  document.getElementById('modalHost').classList.remove('open');
+  if(modalResolve){ modalResolve(answer); modalResolve = null; }
+}
+document.getElementById('modalYes').addEventListener('click', () => closeModal(true));
+document.getElementById('modalNo').addEventListener('click', () => closeModal(false));
+document.getElementById('modalHost').addEventListener('click', e => { if(e.target.id === 'modalHost') closeModal(false); });
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && document.getElementById('modalHost').classList.contains('open')) closeModal(false);
+});
+
+/* ---------------- Tabs ---------------- */
+function showTab(name){
+  document.getElementById('tab-activacion').classList.toggle('active', name==='activacion');
+  document.getElementById('tab-registro').classList.toggle('active', name==='registro');
+  document.getElementById('tabbtn-activacion').setAttribute('aria-selected', name==='activacion');
+  document.getElementById('tabbtn-registro').setAttribute('aria-selected', name==='registro');
+  updateStickyOffset();
+}
+function jumpToSection(id){
+  if(!id) return;
+  showTab('registro');
+  document.getElementById('tabbtn-registro').setAttribute('aria-selected','true');
+  document.getElementById('tabbtn-activacion').setAttribute('aria-selected','false');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 30);
+}
+
+/* ---------------- Sticky offset ---------------- */
+function updateStickyOffset(){
+  const topbarH = document.querySelector('.topbar').offsetHeight;
+  document.documentElement.style.setProperty('--topbar-h', topbarH + 'px');
+  const timerbarH = document.querySelector('.timerbar').offsetHeight;
+  document.documentElement.style.setProperty('--sticky-offset', (topbarH + timerbarH + 14) + 'px');
+}
+window.addEventListener('resize', updateStickyOffset);
+
+let compactState = false;
+function handleScrollCompact(){
+  const shouldCompact = window.scrollY > 40;
+  if(shouldCompact === compactState) return;
+  compactState = shouldCompact;
+  document.querySelector('.topbar').classList.toggle('compact', shouldCompact);
+  document.querySelector('.timerbar').classList.toggle('compact', shouldCompact);
+  updateStickyOffset();
+}
+window.addEventListener('scroll', handleScrollCompact, { passive:true });
+
+/* ---------------- Reloj ---------------- */
+let clockStart = null, clockInterval = null;
+let caseFinished = false, finishedAt = null;
+function startClock(){
+  if(clockStart) return;
+  clockStart = Date.now();
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').textContent = 'Reloj en marcha';
+  document.getElementById('finishBtn').disabled = false;
+  clockInterval = setInterval(updateClock, 1000);
+  renderMilestones();
+}
+function updateClock(){
+  const s = Math.floor((Date.now()-clockStart)/1000);
+  const m = String(Math.floor(s/60)).padStart(2,'0');
+  const sec = String(s%60).padStart(2,'0');
+  document.getElementById('clockDisplay').textContent = m+':'+sec;
+  renderMilestones();
+}
+function elapsedMinutes(){
+  if(!clockStart) return null;
+  if(caseFinished) return finishedAt;
+  return (Date.now()-clockStart)/60000;
+}
+function finishCase(){
+  if(!clockStart){ toast('Primero inicia el reloj con el llamado del ERR.', 'warn'); return; }
+  if(caseFinished) return;
+  caseFinished = true;
+  finishedAt = (Date.now()-clockStart)/60000;
+  clearInterval(clockInterval);
+  document.getElementById('finishBtn').textContent = 'Reabrir caso';
+  document.getElementById('finishBtn').onclick = reopenCase;
+  document.getElementById('startBtn').textContent = 'Evento concluido — reloj detenido';
+  document.getElementById('estadoCasoDisplay').textContent = 'Finalizado';
+  renderMilestones();
+  generateSummary();
+  document.getElementById('summaryPanel').style.display = 'block';
+  const banner = document.getElementById('caseStatusBanner');
+  banner.style.display = 'flex';
+  banner.className = 'status-banner';
+  banner.innerHTML = `<span>✓ Evento concluido — tiempo total: <span class="t">${finishedAt.toFixed(1)} min</span></span><button class="btn btn-ghost" onclick="reopenCase()">Reabrir caso</button>`;
+  saveCaseLocal(true);
+  saveCaseToCloud(true);
+  toast('Evento concluido. Informe generado — revisa la pestaña "Registro ERR".', 'ok');
+}
+function reopenCase(){
+  if(!caseFinished) return;
+  caseFinished = false;
+  clockInterval = setInterval(updateClock, 1000);
+  document.getElementById('finishBtn').textContent = 'Concluir evento';
+  document.getElementById('finishBtn').onclick = finishCase;
+  document.getElementById('startBtn').textContent = 'Reloj en marcha';
+  document.getElementById('estadoCasoDisplay').textContent = 'En curso';
+  finishedAt = null;
+  document.getElementById('caseStatusBanner').style.display = 'none';
+  renderMilestones();
+}
+
+/* ---------------- Tiempo de respuesta (< 5 min) ---------------- */
+const MILESTONES = [
+  {id:'err_intensivista', label:'Equipo ERR (médico intensivista en turno) llega a la habitación', goal:5},
+  {id:'respaldo_urgenciologo', label:'Respaldo: urgenciólogo (si el intensivista no puede acudir)', goal:5},
+  {id:'laboratorio', label:'Laboratorio (apoyo diagnóstico)', goal:5},
+  {id:'imagenologia', label:'Imagenología (apoyo diagnóstico)', goal:5},
+  {id:'supervisora', label:'Supervisora de enfermería', goal:5},
+];
+const markedAt = {};
+function renderMilestones(){
+  const wrap = document.getElementById('milestoneList');
+  wrap.innerHTML = '';
+  const chipRow = document.getElementById('chipRow');
+  chipRow.innerHTML = '';
+  MILESTONES.forEach((m, idx) => {
+    const row = document.createElement('div');
+    row.className = 'milestone';
+    const marked = markedAt[m.id];
+    let badgeHtml, timeHtml = '', btnHtml;
+    if(marked != null){
+      const withinGoal = marked <= m.goal;
+      badgeHtml = `<span class="badge ${withinGoal ? 'ontime' : 'late'}">${withinGoal ? 'A tiempo' : 'Fuera de tiempo'}</span>`;
+      timeHtml = `<span class="marked-time">marcado a los ${marked.toFixed(1)} min</span>`;
+      btnHtml = `<button class="btn btn-ghost" onclick="unmark('${m.id}')">Deshacer</button>`;
+    } else {
+      badgeHtml = `<span class="badge pending">Pendiente</span>`;
+      const disabled = !clockStart ? 'disabled title="Inicia el reloj primero"' : (caseFinished ? 'disabled title="Evento concluido — reabre para seguir marcando"' : '');
+      btnHtml = `<button class="btn btn-primary" ${disabled} onclick="mark('${m.id}')">Marcar llegada</button>`;
+    }
+    row.innerHTML = `
+      <div class="num">${idx+1}</div>
+      <div class="info"><strong>${m.label}</strong><span>Meta: ≤ ${m.goal} min desde el llamado</span></div>
+      <div class="status">${badgeHtml}${timeHtml}${btnHtml}</div>
+    `;
+    wrap.appendChild(row);
+
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    let state = 'pending';
+    if(marked != null){ state = marked <= m.goal ? 'ontime' : 'late'; }
+    chip.setAttribute('data-state', state);
+    chip.innerHTML = `<span class="dot"></span>${idx+1}${marked != null ? ` <span class="t mono">${marked.toFixed(0)}m</span>` : ''}`;
+    chipRow.appendChild(chip);
+  });
+}
+function mark(id){
+  const mins = elapsedMinutes();
+  if(mins == null) return;
+  markedAt[id] = mins;
+  renderMilestones();
+}
+function unmark(id){
+  delete markedAt[id];
+  renderMilestones();
+}
+
+/* ---------------- Checkbox / radio builders ---------------- */
+function buildCheckGrid(containerId, items){
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map((t,i) => {
+    const id = containerId+'_'+i;
+    return `<label class="check-item"><input type="checkbox" id="${id}" value="${t}">${t}</label>`;
+  }).join('');
+}
+function buildRadioRow(containerId, items, name){
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map((t,i) => {
+    const id = name+'_'+i;
+    return `<div class="radio-pill"><input type="radio" name="${name}" id="${id}" value="${t}"><label for="${id}">${t}</label></div>`;
+  }).join('');
+}
+
+buildRadioRow('cuneroRow', ['Adulto / pediátrico (no cunero)','Cunero fisiológico / recién nacido'], 'esCunero');
+document.getElementById('cuneroRow').addEventListener('change', () => {
+  const cunero = document.querySelector('input[name="esCunero"]:checked');
+  const isCunero = cunero && cunero.value === 'Cunero fisiológico / recién nacido';
+  document.getElementById('extNormal').style.display = isCunero ? 'none' : 'flex';
+  document.getElementById('extCunero').style.display = isCunero ? 'flex' : 'none';
+});
+
+buildCheckGrid('criteriosGrid', [
+  'Dolor torácico nuevo o en reposo',
+  'Cambios en la función respiratoria (polipnea persistente, cianosis, estridor)',
+  'Cambio súbito en el estado de alerta',
+  'SpO2 <90% pese a oxígeno suplementario al 100%',
+  'FR <8 o >30 rpm',
+  'FC <40 o >120 lpm con deterioro hemodinámico',
+  'PAM <60 mmHg sin respuesta a volumen',
+  'Dolor que no responde a analgesia habitual',
+  'Síndrome de respuesta inflamatoria sistémica (SRIS)',
+  'Hipotermia o hipertermia que no responde a tratamiento',
+  'Hemorragia evidente y persistente',
+  'Agitación o delirio que no responde a tratamiento',
+  'Crisis convulsivas que no responden a tratamiento',
+  'Sobre sedación',
+]);
+document.getElementById('criteriosGrid').addEventListener('change', () => {
+  const any = [...document.querySelectorAll('#criteriosGrid input:checked')].length > 0;
+  document.getElementById('criteriosBanner').style.display = any ? 'flex' : 'none';
+});
+
+buildCheckGrid('motivoGrid', [
+  'Preocupación continua del personal',
+  'FC <40 o >120 lpm',
+  'FR <8 o >30 rpm',
+  'TAM <60 mmHg',
+  'SpO2 <90% con FiO2 >50%',
+  'Sangrado activo significativo',
+  'Estado mental alterado',
+  'Falta de respuesta al tratamiento',
+  'Crisis convulsivas',
+  'Diuresis <30 cc/hr',
+  'Dolor de difícil control',
+]);
+buildCheckGrid('viaAereaGrid', [
+  'Manejo de vía aérea','Aspiración','Nebulizaciones','Intubación','Ventilación mecánica no invasiva (VMNI)',
+  'Mascarilla reservorio','Bolsa válvula mascarilla','Mascarilla laríngea','Vía aérea quirúrgica','Sin intervención','Otros',
+]);
+buildCheckGrid('circulacionGrid', [
+  'Bolos de líquidos IV','Hemoderivados','Electrocardiograma','RCP','Desfibrilación','Cardioversión','Sin intervención',
+]);
+buildRadioRow('resultadosRow', ['Pasar a UCI','Defunción','Se mantiene en la misma habitación','Cuidados paliativos','Quirófano','Otros'], 'resultado');
+buildRadioRow('retroRealizadaRow', ['Sí','No'], 'retroRealizada');
+
+/* ---------------- Roles / 5R / SBAR (referencia) ---------------- */
+document.getElementById('rolesGrid').innerHTML = [
+  'Enfermera asignada al paciente','Coordinador de Piso','Médico de Hospitalización','Urgenciólogo','Anestesiólogo',
+  'Médico de UTI','Neonatólogo/Pediatra (para RN)','Líder del ERR','Personal de Enfermería de UTI',
+  'Coordinadora/enfermera de UCIN','Supervisor de enfermería/jefe de área',
+  'Personal de servicios de apoyo (Imagenología, laboratorio, biomédica, farmacia, almacén, camilleros)',
+].map(r => `<div class="role-chip">${r}</div>`).join('');
+
+document.getElementById('chain5r').innerHTML = [
+  {n:'1', t:'Revisar', d:'Revisión periódica de signos vitales y estado clínico del paciente hospitalizado.'},
+  {n:'2', t:'Reconocer', d:'Identificar signos de alarma o deterioro (criterios directos y/o NEWS 2 / PEWS 2).'},
+  {n:'3', t:'Reportar', d:'Comunicar el hallazgo con el modelo SBAR al equipo correspondiente.'},
+  {n:'4', t:'Responder', d:'Activar al ERR y ejecutar las intervenciones indicadas.'},
+  {n:'5', t:'Repetir', d:'Retroalimentación: revisar las 4 acciones anteriores para identificar fallas y generar una estrategia de mejora.'},
+].map(s => `<div class="chain-step"><div class="n">Paso ${s.n}</div><b>${s.t}</b><span>${s.d}</span></div>`).join('');
+
+document.getElementById('sbarRefGrid').innerHTML = [
+  {l:'S', t:'Situación', d:'¿Qué pasa con el paciente? ¿Cuál fue el motivo de activación?'},
+  {l:'B', t:'Antecedentes', d:'Interrogatorio breve — ¿qué ha ocurrido desde su ingreso?'},
+  {l:'A', t:'Evaluación', d:'Exploración física — ¿qué compromete la vida del paciente?'},
+  {l:'R', t:'Recomendación', d:'¿Qué hacer para corregir el problema? Modificación de indicaciones, transferencia a UCI, cuidados paliativos.'},
+].map(s => `<div class="sbar-card"><h3><span class="letter">${s.l}</span>${s.t}</h3><span style="font-size:0.82rem;color:var(--text-muted);">${s.d}</span></div>`).join('');
+
+/* ---------------- NEWS 2 ---------------- */
+const NEWS2_ITEMS = [
+  {id:'fr', label:'Frecuencia respiratoria (rpm)', opts:[[3,'<8'],[2,'8–9'],[1,'9–11'],[0,'12–20'],[1,'21–25'],[2,'26–29'],[3,'>30']]},
+  {id:'fc', label:'Frecuencia cardiaca (lpm)', opts:[[3,'<40'],[2,'41–49'],[1,'50–59'],[0,'60–90'],[1,'91–100'],[2,'101–119'],[3,'>120']]},
+  {id:'tas', label:'Presión arterial sistólica (mmHg)', opts:[[3,'<90'],[2,'91–100'],[1,'101–109'],[0,'110–160'],[1,'161–180'],[2,'181–219'],[3,'>220']]},
+  {id:'o2', label:'Oxígeno suplementario', opts:[[0,'Aire ambiente'],[1,'Oxígeno <3 L/min'],[2,'Oxígeno 4–9 L/min'],[3,'Oxígeno >10 L/min']]},
+  {id:'spo2', label:'Saturación arterial de O2 (%)', opts:[[3,'<90'],[2,'91–93'],[1,'94–95'],[0,'≥96']]},
+  {id:'temp', label:'Temperatura (°C)', opts:[[3,'<35'],[2,'35.1–35.5'],[1,'35.6–35.9'],[0,'36–37'],[1,'37.1–37.9'],[2,'38–38.9'],[3,'>39']]},
+  {id:'conciencia', label:'Estado de conciencia', opts:[[3,'Coma'],[2,'Estupor'],[1,'Somnolencia'],[0,'Alerta'],[1,'Desorientación'],[2,'Ideas delirantes'],[3,'Agitación psicomotriz']]},
+  {id:'dolor', label:'Dolor (EVA 0–10)', opts:[[0,'0'],[1,'1–5'],[2,'6–9'],[3,'10']]},
+  {id:'hemorragia', label:'Hemorragia', opts:[[0,'0 mL/hr'],[1,'1–50 mL/hr'],[2,'51–99 mL/hr'],[3,'>100 mL/hr']]},
+];
+function buildNews2(){
+  const el = document.getElementById('news2Items');
+  el.innerHTML = NEWS2_ITEMS.map(item => `
+    <div class="scale-item">
+      <div class="qlabel">${item.label}</div>
+      <div class="radio-row">
+        ${item.opts.map(([v,t],i) => `<div class="radio-pill"><input type="radio" name="news2_${item.id}" id="news2_${item.id}_${i}" value="${v}" onchange="computeNews2()"><label for="news2_${item.id}_${i}">${v} — ${t}</label></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function computeNews2(){
+  let total = 0, maxSingle = 0, answered = 0;
+  NEWS2_ITEMS.forEach(item => {
+    const checked = document.querySelector(`input[name="news2_${item.id}"]:checked`);
+    if(checked){
+      const v = parseInt(checked.value,10);
+      total += v; answered++;
+      if(v > maxSingle) maxSingle = v;
+    }
+  });
+  document.getElementById('news2Total').textContent = total;
+  document.getElementById('dockNews2').textContent = total;
+
+  const tiers = ['azul','verde','amarillo','naranja','rojo'];
+  let tierIdx;
+  if(total >= 7) tierIdx = 4;
+  else if(total >= 5) tierIdx = 3;
+  else if(total >= 1) tierIdx = 1;
+  else tierIdx = 0;
+  if(maxSingle >= 3 && tierIdx < 2) tierIdx = 2;
+  const tier = tiers[tierIdx];
+  const labels = { azul:'Triage Azul', verde:'Triage Verde', amarillo:'Triage Amarillo', naranja:'Triage Naranja', rojo:'Triage Rojo' };
+  document.getElementById('news2TriageBadge').innerHTML = `<span class="triage-badge ${tier}">${labels[tier]}</span>`;
+  document.getElementById('dockTriage').textContent = labels[tier].replace('Triage ','');
+
+  const messages = {
+    azul: ['Bajo — continuar cuidados de enfermería, signos vitales cada 8 h.', 'ok'],
+    verde: ['Bajo — continuar cuidados, signos vitales cada 4–6 h.', 'ok'],
+    amarillo: ['Bajo/Medio — respuesta urgente en piso, signos vitales cada hora. Notificar a coordinador de piso, médico de hospitalización y médico tratante.', 'caution'],
+    naranja: ['Medio — respuesta urgente en piso, signos vitales cada hora.', 'warn2'],
+    rojo: ['Alto — respuesta emergente, monitoreo continuo. ACTIVAR EL ERR (ext. 1800).', 'flag'],
+  };
+  const [msg, cls] = messages[tier];
+  const interp = document.getElementById('news2Interp');
+  interp.textContent = `${msg} — ${total} puntos · ${answered} de ${NEWS2_ITEMS.length} parámetros evaluados` + (maxSingle >= 3 ? ' · hay un parámetro individual en 3 puntos.' : '');
+  interp.className = 'interp ' + cls;
+}
+function resetNews2(){
+  NEWS2_ITEMS.forEach(item => {
+    document.querySelectorAll(`input[name="news2_${item.id}"]`).forEach(el => el.checked = false);
+  });
+  computeNews2();
+}
+function copyNews2(){
+  const total = document.getElementById('news2Total').textContent;
+  const detail = NEWS2_ITEMS.map(item => {
+    const c = document.querySelector(`input[name="news2_${item.id}"]:checked`);
+    return item.label + ': ' + (c ? c.nextElementSibling.textContent : '—');
+  }).join('\n');
+  const text = 'NEWS 2 total: ' + total + '\n' + document.getElementById('news2Interp').textContent + '\n\n' + detail;
+  navigator.clipboard.writeText(text)
+    .then(()=>toast('Puntaje NEWS 2 copiado.', 'ok'))
+    .catch(()=>toast('No se pudo copiar automáticamente.', 'warn'));
+}
+buildNews2();
+
+/* ---------------- PEWS 2 — numérico (Anexo 7) ---------------- */
+const PEWS2_AGE_GROUPS = {
+  '0-11m': {
+    label: '0 a 11 meses',
+    fc: [[3,'<80'],[2,'81–90'],[1,'91–109'],[0,'110–180'],[1,'181–190'],[3,'>200']],
+    fr: [[3,'<20'],[1,'30–39'],[0,'40–60'],[1,'50–59'],[3,'>60']],
+    pas: [[3,'<59'],[1,'60–69'],[0,'70–99'],[1,'100–109'],[3,'>110']],
+  },
+  '1-2a': {
+    label: '1 a 2 años',
+    fc: [[3,'<90'],[2,'90–99'],[1,'100–109'],[0,'110–160'],[1,'161–170'],[2,'171–190'],[3,'>190']],
+    fr: [[3,'<20'],[1,'20–29'],[0,'30–40'],[1,'41–50'],[2,'51–60'],[3,'>60']],
+    pas: [[3,'<59'],[1,'60–69'],[0,'70–99'],[1,'100–109'],[3,'>110']],
+  },
+  '2-4a': {
+    label: '2 a 4 años (preescolar)',
+    fc: [[3,'<70'],[2,'70–79'],[1,'80–89'],[0,'90–140'],[1,'141–160'],[2,'161–170'],[3,'>170']],
+    fr: [[3,'<19'],[0,'20–30'],[1,'31–50'],[2,'51–60'],[3,'>60']],
+    pas: [[3,'<69'],[1,'70–79'],[0,'80–99'],[1,'100–119'],[3,'>120']],
+  },
+  '5-10a': {
+    label: '5 a 10 años (escolar)',
+    fc: [[3,'<60'],[2,'60–69'],[1,'70–79'],[0,'80–120'],[1,'121–140'],[2,'141–160'],[3,'>160']],
+    fr: [[3,'<19'],[0,'20–30'],[1,'31–50'],[2,'51–60'],[3,'>60']],
+    pas: [[3,'<79'],[1,'80–89'],[0,'90–109'],[1,'110–129'],[3,'>130']],
+  },
+  '11-17a': {
+    label: '11 a 17 años (adolescente)',
+    fc: [[3,'<60'],[0,'55–100'],[1,'101–120'],[2,'121–140'],[3,'>140']],
+    fr: [[3,'<10'],[0,'10–20'],[1,'21–30'],[2,'31–40'],[3,'>40']],
+    pas: [[3,'<89'],[1,'90–99'],[0,'100–119'],[1,'120–139'],[3,'>130']],
+  },
+};
+function buildRadioScoreRow(containerId, opts, name){
+  const el = document.getElementById(containerId);
+  el.innerHTML = opts.map(([v,t],i) => `<div class="radio-pill"><input type="radio" name="${name}" id="${name}_${i}" value="${v}" onchange="computePews()"><label for="${name}_${i}">${v} — ${t}</label></div>`).join('');
+}
+function onPewsAgeChange(){
+  const key = document.getElementById('pewsGrupoEdad').value;
+  const wrap = document.getElementById('pewsAgeFields');
+  if(!key){
+    wrap.className = 'pending-banner';
+    wrap.innerHTML = 'Selecciona un grupo de edad para capturar frecuencia cardiaca, respiratoria y presión arterial.';
+    computePews();
+    return;
+  }
+  const g = PEWS2_AGE_GROUPS[key];
+  wrap.className = '';
+  wrap.innerHTML = `
+    <div class="scale-item">
+      <div class="qlabel">Frecuencia cardiaca (lpm) — ${g.label}</div>
+      <div class="radio-row" id="pewsFcRow"></div>
+    </div>
+    <div class="scale-item">
+      <div class="qlabel">Frecuencia respiratoria (rpm) — ${g.label}</div>
+      <div class="radio-row" id="pewsFrRow"></div>
+    </div>
+    <div class="scale-item">
+      <div class="qlabel">Presión arterial sistólica (mmHg) — ${g.label}</div>
+      <div class="radio-row" id="pewsPasRow"></div>
+    </div>
+  `;
+  buildRadioScoreRow('pewsFcRow', g.fc, 'pewsFc');
+  buildRadioScoreRow('pewsFrRow', g.fr, 'pewsFr');
+  buildRadioScoreRow('pewsPasRow', g.pas, 'pewsPas');
+  computePews();
+}
+buildRadioScoreRow('pewsConcienciaRow', [[3,'No responde / coma'],[2,'Estupor'],[1,'Somnolencia'],[0,'Alerta'],[1,'Irritable'],[2,'Llanto — se controla'],[3,'Llanto — no se controla']], 'pewsConciencia');
+buildRadioScoreRow('pewsCapilarRow', [[0,'<2 segundos'],[1,'2 segundos'],[2,'2–3 segundos'],[3,'4 segundos'],[3,'>4 segundos']], 'pewsCapilar');
+buildRadioScoreRow('pewsSpo2Row', [[3,'<91%'],[2,'92%'],[1,'93%'],[0,'≥94%']], 'pewsSpo2');
+buildRadioScoreRow('pewsO2Row', [[0,'Aire ambiente'],[1,'Oxígeno 3 L/min'],[2,'Oxígeno 4 L/min'],[3,'Oxígeno >5 L/min']], 'pewsO2');
+buildRadioScoreRow('pewsTempRow', [[3,'<34.9°C'],[2,'35°C'],[1,'35.1–35.9°C'],[0,'36–37.5°C'],[1,'38–38.5°C'],[2,'38.6–39°C'],[3,'>39°C']], 'pewsTemp');
+
+function pewsScoreOf(name){
+  const c = document.querySelector(`input[name="${name}"]:checked`);
+  return c ? parseInt(c.value,10) : null;
+}
+function computePews(){
+  const parts = ['pewsFc','pewsFr','pewsPas','pewsConciencia','pewsCapilar','pewsSpo2','pewsO2','pewsTemp'];
+  let total = 0, answered = 0;
+  parts.forEach(name => {
+    const v = pewsScoreOf(name);
+    if(v != null){ total += v; answered++; }
+  });
+  document.getElementById('pewsTotal').textContent = total;
+  document.getElementById('dockPews2').textContent = total;
+
+  let rangoLabel, cls, badgeCls, texto;
+  if(total >= 7){ rangoLabel='Alto'; cls='flag'; badgeCls='rojo'; texto='Cambio significativo en el estado de salud. Activación al Equipo de Respuesta Rápida. Monitoreo continuo de signos vitales. Garantizar evaluación médica inmediata por especialista.'; }
+  else if(total >= 5){ rangoLabel='5–6 puntos (sin nombre en el documento)'; cls='warn2'; badgeCls='naranja'; texto='Evaluación urgente por médico de piso. Priorizar evaluación respiratoria y uso de O2. Signos vitales cada hora.'; }
+  else if(total >= 3){ rangoLabel='Medio'; cls='caution'; badgeCls='amarillo'; texto='Signos tempranos de deterioro. Revisión de signos vitales cada 4 horas.'; }
+  else { rangoLabel='Bajo'; cls='ok'; badgeCls='verde'; texto='Sin cambios en el estado de salud del niño. Continúa el plan de cuidados. Signos vitales cada 8 horas.'; }
+  document.getElementById('pewsRangoBadge').innerHTML = `<span class="triage-badge ${badgeCls}">${rangoLabel}</span>`;
+  const interp = document.getElementById('pewsInterp');
+  interp.textContent = `${texto} — ${total} puntos · ${answered} de ${parts.length} parámetros evaluados`;
+  interp.className = 'interp ' + cls;
+}
+function resetPews(){
+  document.getElementById('pewsGrupoEdad').value = '';
+  onPewsAgeChange();
+  ['pewsConciencia','pewsCapilar','pewsSpo2','pewsO2','pewsTemp'].forEach(name => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(el => el.checked = false);
+  });
+  computePews();
+}
+onPewsAgeChange();
+
+/* ---------------- PEWS 2 — valoración subjetiva (Anexo 8) ---------------- */
+const PEWS_SUBJ_ITEMS = [
+  {id:'resp', label:'Respiración', opts:[
+    [0,'Normal para la edad, sin dificultad'],
+    [1,'Ligera dificultad para respirar. Aumento de la FR'],
+    [2,'Dificultad respiratoria moderada. FR alta o baja'],
+    [3,'Dificultad respiratoria severa. Uso de músculos accesorios o pausas en la respiración'],
+  ]},
+  {id:'fc', label:'Frecuencia cardiaca', opts:[
+    [0,'Normal para la edad'],
+    [1,'Ligera taquicardia o bradicardia'],
+    [2,'Taquicardia o bradicardia moderada'],
+    [3,'Taquicardia o bradicardia severa'],
+  ]},
+  {id:'color', label:'Color y perfusión', opts:[
+    [0,'Piel de color normal, buena perfusión'],
+    [1,'Palidez o piel moteada'],
+    [2,'Cianosis periférica'],
+    [3,'Cianosis central'],
+  ]},
+  {id:'neuro', label:'Estado neurológico', opts:[
+    [0,'Alerta y tranquilo'],
+    [1,'Inquieto, pero se consuela fácilmente'],
+    [2,'Irritable, difícil de consolar'],
+    [3,'Letárgico o no responde'],
+  ]},
+  {id:'salud', label:'Salud general / preocupación de padres y enfermera', opts:[
+    [0,'Activo, come y bebe normal, apariencia normal'],
+    [1,'Menor ingesta de alimentos y líquidos, menos activo, no luce normal'],
+    [2,'Rechazo de alimentos y líquidos, significativamente menos activo, preocupación de los padres y enfermera'],
+    [3,'Ninguna ingesta de alimentos y líquidos, inactividad total, padres muy preocupados'],
+  ]},
+];
+function buildPewsSubj(){
+  document.getElementById('pewsSubjItems').innerHTML = PEWS_SUBJ_ITEMS.map(item => `
+    <div class="scale-item">
+      <div class="qlabel">${item.label}</div>
+      <div class="radio-row">
+        ${item.opts.map(([v,t],i) => `<div class="radio-pill"><input type="radio" name="pewsSubj_${item.id}" id="pewsSubj_${item.id}_${i}" value="${v}" onchange="computePewsSubj()"><label for="pewsSubj_${item.id}_${i}">${v} — ${t}</label></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function computePewsSubj(){
+  let total = 0;
+  PEWS_SUBJ_ITEMS.forEach(item => {
+    const c = document.querySelector(`input[name="pewsSubj_${item.id}"]:checked`);
+    if(c) total += parseInt(c.value,10);
+  });
+  document.getElementById('pewsSubjTotal').textContent = total;
+}
+function resetPewsSubj(){
+  PEWS_SUBJ_ITEMS.forEach(item => {
+    document.querySelectorAll(`input[name="pewsSubj_${item.id}"]`).forEach(el => el.checked = false);
+  });
+  computePewsSubj();
+}
+buildPewsSubj();
+
+/* ---------------- Escalamiento ---------------- */
+const escalationStamps = {};
+function marcarEscalamiento(tipo){
+  const mins = elapsedMinutes();
+  const hora = new Date().toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+  escalationStamps[tipo] = { hora, minutos: mins };
+  const labelMap = { ictus:'stampIctus', sica:'stampSica', azul:'stampAzul' };
+  const nameMap = { ictus:'Código Ictus', sica:'SICA', azul:'Código Azul' };
+  document.getElementById(labelMap[tipo]).textContent = `Escalado a ${nameMap[tipo]} a las ${hora}` + (mins != null ? ` (min. ${mins.toFixed(1)} del evento)` : '');
+  toast(`Escalamiento a ${nameMap[tipo]} registrado.`, 'ok');
+  const urlField = tipo === 'ictus' ? document.getElementById('urlIctus') : (tipo === 'azul' ? document.getElementById('urlAzul') : null);
+  if(urlField && urlField.value.trim()) window.open(urlField.value.trim(), '_blank');
+  saveDraft();
+}
+function saveEscalationLinks(){
+  try {
+    localStorage.setItem('err_url_ictus', document.getElementById('urlIctus').value);
+    localStorage.setItem('err_url_azul', document.getElementById('urlAzul').value);
+  } catch(e){}
+}
+(function initEscalationLinks(){
+  try {
+    document.getElementById('urlIctus').value = localStorage.getItem('err_url_ictus') || '';
+    document.getElementById('urlAzul').value = localStorage.getItem('err_url_azul') || '';
+  } catch(e){}
+})();
+
+/* ---------------- Helpers de lectura de formulario ---------------- */
+function val(id){ const el = document.getElementById(id); return el ? (el.value || '—') : '—'; }
+function checkedList(containerId){
+  return [...document.querySelectorAll('#'+containerId+' input:checked')].map(i => i.value).join(', ') || '—';
+}
+function radioVal(name){
+  const c = document.querySelector(`input[name="${name}"]:checked`);
+  return c ? c.value : '—';
+}
+function radioLabelText(name){
+  const c = document.querySelector(`input[name="${name}"]:checked`);
+  return c && c.nextElementSibling ? c.nextElementSibling.textContent : '—';
+}
+function setNow(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const d = new Date();
+  el.value = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  saveDraft();
+}
+
+/* ---------------- Informe ---------------- */
+function buildReportText(){
+  const L = [];
+  const push = (s) => L.push(s);
+  const blank = v => v === undefined || v === null || v === '' || v === '—';
+  const row = (label, value, unit) => {
+    if(blank(value)) return;
+    push('  ' + label + ': ' + value + (unit ? ' ' + unit : ''));
+  };
+  const head = (t) => { push(''); push(t.toUpperCase()); };
+
+  push('INFORME DE ACTIVACIÓN — EQUIPO DE RESPUESTA RÁPIDA (ERR)');
+  push('Hospital CIMA — El Corazón Médico de Sonora');
+  push('='.repeat(56));
+  push('Folio: ' + val('f_caseid'));
+  push('Informe generado: ' + new Date().toLocaleString('es-MX'));
+  if(caseFinished) push('Evento concluido en ' + finishedAt.toFixed(1) + ' min desde el llamado');
+  { const q = val('capturadoPor'); if(q !== '—') push('Capturó: ' + q); }
+
+  head('Encabezado');
+  row('Fecha', val('f_fecha'));
+  row('Habitación', val('f_habitacion'));
+  row('Hora de llamado', val('f_horaLlamado'));
+  row('Hora de llegada', val('f_horaLlegada'));
+  row('Hora de concluido', val('f_horaConcluido'));
+  row('Alergias', val('f_alergias'));
+  row('APP', val('f_app'));
+  row('Dx médico', val('f_dxMedico'));
+  row('¿Quién activó?', val('activadoPor'));
+  row('Rol de quien activa', val('rolActiva'));
+  row('Tipo de paciente', radioVal('esCunero'));
+
+  head('Criterios de activación directa marcados');
+  row('Criterios', checkedList('criteriosGrid'));
+
+  head('Tiempo de respuesta (< 5 min)');
+  MILESTONES.forEach(m => {
+    const t = markedAt[m.id];
+    push('  ' + (t != null ? String(t.toFixed(1)).padStart(6) + ' min' : '     — sin marcar') + '  ' + m.label);
+  });
+
+  head('NEWS 2 (adultos)');
+  row('Puntaje total', document.getElementById('news2Total').textContent);
+  row('Interpretación', document.getElementById('news2Interp').textContent);
+
+  head('PEWS 2 (pediátrico) — numérico, Anexo 7');
+  { const ageKey = document.getElementById('pewsGrupoEdad').value;
+    row('Grupo de edad', ageKey && PEWS2_AGE_GROUPS[ageKey] ? PEWS2_AGE_GROUPS[ageKey].label : '—'); }
+  row('Frecuencia cardiaca', radioLabelText('pewsFc'));
+  row('Frecuencia respiratoria', radioLabelText('pewsFr'));
+  row('Presión arterial sistólica', radioLabelText('pewsPas'));
+  row('Estado de conciencia', radioLabelText('pewsConciencia'));
+  row('Llenado capilar', radioLabelText('pewsCapilar'));
+  row('SpO2', radioLabelText('pewsSpo2'));
+  row('Uso de O2', radioLabelText('pewsO2'));
+  row('Temperatura', radioLabelText('pewsTemp'));
+  row('Puntaje total', document.getElementById('pewsTotal').textContent);
+  row('Interpretación', document.getElementById('pewsInterp').textContent);
+
+  head('PEWS 2 — valoración subjetiva, Anexo 8');
+  PEWS_SUBJ_ITEMS.forEach(item => row(item.label, radioLabelText('pewsSubj_' + item.id)));
+  row('Puntaje total subjetivo (0–15)', document.getElementById('pewsSubjTotal').textContent);
+
+  head('Motivo de activación');
+  row('Motivo', checkedList('motivoGrid'));
+  row('Otros', val('motivoOtros'));
+
+  head('Intervenciones');
+  row('Vía aérea y ventilación', checkedList('viaAereaGrid'));
+  row('Circulación', checkedList('circulacionGrid'));
+  row('Medicamentos', val('f_medicamentos'));
+  row('Otras intervenciones', val('f_otrasIntervenciones'));
+
+  head('Personal involucrado');
+  row('Enf. asignada', val('p_enfAsignada'));
+  row('Médico de hospitalización', val('p_medHospitalizacion'));
+  row('Jefe de piso', val('p_jefePiso'));
+  row('Médico intensivista', val('p_medIntensivista'));
+  row('Enf. de UTI', val('p_enfUti'));
+  row('Supervisora', val('p_supervisora'));
+  row('Médico tratante', val('p_medTratante'));
+
+  head('SBAR');
+  row('Situación', val('sbar_s'));
+  row('Antecedentes', val('sbar_b'));
+  row('Evaluación', val('sbar_a'));
+  row('Recomendación', val('sbar_r'));
+
+  head('Evaluación inicial');
+  row('TA', val('ei_ta'), 'mmHg');
+  row('FC', val('ei_fc'), 'lpm');
+  row('FR', val('ei_fr'), 'rpm');
+  row('Temp', val('ei_temp'), '°C');
+  row('SpO2', val('ei_spo2'), '%');
+  row('Glasgow', val('ei_glasgow'));
+
+  head('Evaluación final');
+  row('TA', val('ef_ta'), 'mmHg');
+  row('FC', val('ef_fc'), 'lpm');
+  row('FR', val('ef_fr'), 'rpm');
+  row('Temp', val('ef_temp'), '°C');
+  row('SpO2', val('ef_spo2'), '%');
+  row('Glasgow', val('ef_glasgow'));
+
+  head('Reporte final');
+  row('Reporte', val('f_reporteFinal'));
+
+  head('Resultados');
+  row('Resultado', radioVal('resultado'));
+  row('Otros', val('resultadosOtros'));
+
+  head('Escalamiento a código de emergencia');
+  ['ictus','sica','azul'].forEach(tipo => {
+    const s = escalationStamps[tipo];
+    if(s) push('  Escalado a ' + ({ictus:'Código Ictus',sica:'SICA',azul:'Código Azul'}[tipo]) + ' a las ' + s.hora + (s.minutos != null ? ' (min. ' + s.minutos.toFixed(1) + ')' : ''));
+  });
+  if(!Object.keys(escalationStamps).length) push('  Sin escalamiento registrado.');
+
+  head('Retroalimentación (5R — Repetir)');
+  row('¿Se realizó?', radioVal('retroRealizada'));
+  row('Nombre y firma', val('f_firmaReporte'));
+
+  return L.join('\n');
+}
+function generateSummary(){
+  const text = buildReportText();
+  document.getElementById('summaryText').textContent = text;
+  document.getElementById('summaryPrintArea').textContent = text;
+  document.getElementById('summaryPanel').style.display = 'block';
+  return text;
+}
+function copyReport(){
+  const text = generateSummary();
+  navigator.clipboard.writeText(text).then(()=>toast('Informe copiado.', 'ok')).catch(()=>toast('No se pudo copiar; selecciona el texto del recuadro.', 'warn'));
+}
+function downloadReport(){
+  const folio = val('f_caseid');
+  const name = 'informe-err' + (folio !== '—' ? '-' + folio.replace(/[^A-Za-z0-9_-]+/g,'_') : '') + '.txt';
+  try {
+    const blob = new Blob([generateSummary()], { type:'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('Informe descargado como ' + name, 'ok');
+  } catch(err){
+    toast('No se pudo descargar. Usa "Copiar informe".', 'warn');
+  }
+}
+function printReport(){
+  generateSummary();
+  document.body.classList.add('printing');
+  window.print();
+  setTimeout(() => document.body.classList.remove('printing'), 500);
+}
+
+/* ---------------- Correo ---------------- */
+function defaultSubject(){
+  const folio = val('f_caseid');
+  return 'Informe ERR' + (folio !== '—' ? ' — ' + folio : '') + ' — ' + new Date().toLocaleDateString('es-MX');
+}
+function saveMailPrefs(){
+  try {
+    localStorage.setItem('err_mail_to', document.getElementById('mailTo').value);
+    localStorage.setItem('err_mail_cc', document.getElementById('mailCc').value);
+  } catch(e){}
+}
+(function initMailPrefs(){
+  try {
+    const to = localStorage.getItem('err_mail_to'); if(to) document.getElementById('mailTo').value = to;
+    const cc = localStorage.getItem('err_mail_cc'); if(cc) document.getElementById('mailCc').value = cc;
+    document.getElementById('capturadoPor').value = localStorage.getItem('err_captura') || '';
+  } catch(e){}
+  document.getElementById('mailSubject').value = defaultSubject();
+})();
+function buildMailUrl(){
+  const to = document.getElementById('mailTo').value.trim();
+  if(!to) return null;
+  const cc = document.getElementById('mailCc').value.trim();
+  const subject = document.getElementById('mailSubject').value.trim() || defaultSubject();
+  const params = [];
+  if(cc) params.push('cc=' + encodeURIComponent(cc));
+  params.push('subject=' + encodeURIComponent(subject));
+  params.push('body=' + encodeURIComponent(buildReportText().slice(0, 1800)));
+  return 'mailto:' + to + '?' + params.join('&');
+}
+function refreshMailLink(){
+  const a = document.getElementById('mailLink');
+  if(!a) return;
+  const url = buildMailUrl();
+  if(url){ a.href = url; a.removeAttribute('aria-disabled'); a.style.opacity = ''; }
+  else { a.href = 'mailto:'; a.setAttribute('aria-disabled','true'); a.style.opacity = '.5'; }
+}
+function sendReportByMail(){
+  const url = buildMailUrl();
+  const status = document.getElementById('mailStatus');
+  if(!url){ status.textContent = 'Escribe primero el correo del destinatario.'; document.getElementById('mailTo').focus(); return; }
+  refreshMailLink();
+  navigator.clipboard.writeText(buildReportText()).catch(()=>{});
+  status.textContent = 'Informe completo copiado al portapapeles por si lo quieres pegar íntegro. Abriendo tu correo…';
+  const opened = window.open(url, '_blank');
+  if(!opened) document.getElementById('mailLink').click();
+}
+
+/* ---------------- Código QR ---------------- */
+(function initQR(){
+  const img = document.getElementById('qrImg');
+  if(img) img.src = '/api/qr?t=' + Date.now();
+})();
+function printQR(){
+  const w = window.open('', '_blank');
+  if(!w){ toast('Permite las ventanas emergentes para imprimir el cartel.', 'warn'); return; }
+  const qrUrl = location.origin + '/api/qr';
+  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8">
+  <title>Equipo de Respuesta Rápida — acceso rápido</title>
+  <style>
+    @page{ margin:14mm; }
+    body{ font-family:Arial,Helvetica,sans-serif; color:#16232A; text-align:center; margin:0; padding:18mm 10mm; }
+    h1{ font-size:30pt; margin:0 0 4pt; color:#00594F; letter-spacing:-0.5pt; }
+    h2{ font-size:14pt; margin:0 0 20pt; font-weight:normal; color:#52666B; }
+    img{ width:250pt; height:250pt; }
+    .steps{ margin:20pt auto 0; max-width:420pt; text-align:left; font-size:12pt; line-height:1.6; }
+    .steps li{ margin-bottom:5pt; }
+    .foot{ margin-top:22pt; font-size:9.5pt; color:#52666B; }
+    .band{ margin-top:16pt; font-size:13pt; font-weight:bold; color:#C00000; }
+  </style></head><body>
+    <h1>EQUIPO DE RESPUESTA RÁPIDA</h1>
+    <h2>Detección temprana y registro de activación · Hospital CIMA</h2>
+    <img src="${qrUrl}" alt="Código QR">
+    <div class="band">Escanea al activar el ERR — el reloj corre desde el llamado</div>
+    <ol class="steps">
+      <li>Escanea el código con la cámara del celular, tablet o abre el enlace en la computadora.</li>
+      <li>Pulsa <b>Llamado ERR — iniciar reloj</b> al activar.</li>
+      <li>Marca criterios de activación, NEWS 2/PEWS 2 y llegada de cada equipo.</li>
+      <li>Completa el registro (Anexo 6) y pulsa <b>Concluir evento</b> al terminar.</li>
+    </ol>
+    <div class="foot">Tiempo de respuesta objetivo: menos de 5 minutos · PR-ENF/GRL-015 v6</div>
+  </body></html>`);
+  w.document.close();
+  setTimeout(() => { w.focus(); w.print(); }, 350);
+}
+
+/* ---------------- Compartir la página ---------------- */
+function sharePage(){
+  const data = { title:'Equipo de Respuesta Rápida — Hospital CIMA', text:'Activación y registro del ERR', url:location.href };
+  if(navigator.share){ navigator.share(data).catch(()=>{}); }
+  else { copyLink(); }
+}
+function copyLink(){
+  navigator.clipboard.writeText(location.href)
+    .then(()=>toast('Enlace copiado.', 'ok'))
+    .catch(()=>toast('Copia el enlace desde la barra de direcciones.', 'warn'));
+}
+
+/* ---------------- Estado / borrador / historial ---------------- */
+const DRAFT_KEY = 'err_draft_v1';
+let draftOn = false;
+function collectState(){
+  const state = { fields:{}, checks:{}, radios:{} };
+  document.querySelectorAll('input[type=text],input[type=number],input[type=date],input[type=time],input[type=email],input[type=url],select,textarea').forEach(el => {
+    if(el.id && el.id !== 'jumpSelect') state.fields[el.id] = el.value;
+  });
+  document.querySelectorAll('input[type=checkbox]').forEach(el => {
+    if(el.id && el.id !== 'draftToggle') state.checks[el.id] = el.checked;
+  });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => { state.radios[el.name] = el.id; });
+  state.escalationStamps = JSON.parse(JSON.stringify(escalationStamps));
+  return state;
+}
+function applyState(state){
+  if(!state) return;
+  Object.entries(state.fields || {}).forEach(([id,v]) => { const el = document.getElementById(id); if(el) el.value = v; });
+  Object.entries(state.checks || {}).forEach(([id,v]) => { const el = document.getElementById(id); if(el) el.checked = v; });
+  onPewsAgeChange();
+  Object.entries(state.radios || {}).forEach(([name,id]) => {
+    const el = document.getElementById(id);
+    if(el && el.name === name) el.checked = true;
+  });
+  if(state.escalationStamps){
+    Object.keys(escalationStamps).forEach(k => delete escalationStamps[k]);
+    Object.assign(escalationStamps, state.escalationStamps);
+    Object.entries(escalationStamps).forEach(([tipo,s]) => {
+      const labelMap = { ictus:'stampIctus', sica:'stampSica', azul:'stampAzul' };
+      const nameMap = { ictus:'Código Ictus', sica:'SICA', azul:'Código Azul' };
+      const el = document.getElementById(labelMap[tipo]);
+      if(el) el.textContent = `Escalado a ${nameMap[tipo]} a las ${s.hora}` + (s.minutos != null ? ` (min. ${s.minutos.toFixed(1)} del evento)` : '');
+    });
+  }
+  const cuneroEvt = new Event('change');
+  document.getElementById('cuneroRow').dispatchEvent(cuneroEvt);
+  computeNews2(); computePews(); computePewsSubj();
+  renderMilestones();
+}
+function saveDraft(){
+  if(!draftOn) return;
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(collectState()));
+    const d = new Date();
+    document.getElementById('draftStatus').textContent = 'Borrador guardado en este dispositivo a las ' + d.toLocaleTimeString('es-MX') + '. Bórralo al terminar el caso.';
+  } catch(e){
+    document.getElementById('draftStatus').textContent = 'No se pudo guardar el borrador en este navegador.';
+  }
+}
+function toggleDraft(){
+  draftOn = document.getElementById('draftToggle').checked;
+  try { localStorage.setItem('err_draft_on', draftOn ? '1' : '0'); } catch(e){}
+  if(draftOn) saveDraft(); else clearDraft(false);
+}
+function clearDraft(announce){
+  try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+  document.getElementById('draftStatus').textContent = draftOn
+    ? 'Borrador activado. Se guardará conforme captures.'
+    : 'Desactivado. Al cerrar o recargar la página se pierde lo capturado.';
+  if(announce) toast('Borrador borrado de este dispositivo.', 'ok');
+}
+(function initDraft(){
+  let on = false, saved = null;
+  try { on = localStorage.getItem('err_draft_on') === '1'; saved = localStorage.getItem(DRAFT_KEY); } catch(e){}
+  if(on){
+    document.getElementById('draftToggle').checked = true;
+    draftOn = true;
+    if(saved){
+      try { applyState(JSON.parse(saved)); } catch(e){}
+      document.getElementById('draftStatus').textContent = 'Se restauró el borrador guardado en este dispositivo.';
+    }
+  }
+  document.addEventListener('input', () => { saveDraft(); refreshMailLink(); });
+  document.addEventListener('change', () => { saveDraft(); refreshMailLink(); });
+})();
+
+async function resetAll(){
+  const ok = await askConfirm('¿Iniciar un nuevo caso?', 'Se borrará lo capturado en pantalla (reloj, checklist y formulario). Los casos ya guardados en el historial no se tocan.', 'Sí, nuevo caso');
+  if(!ok) return;
+  clearInterval(clockInterval);
+  clockStart = null; caseFinished = false; finishedAt = null;
+  Object.keys(markedAt).forEach(k => delete markedAt[k]);
+  Object.keys(escalationStamps).forEach(k => delete escalationStamps[k]);
+  ['stampIctus','stampSica','stampAzul'].forEach(id => document.getElementById(id).textContent = '');
+  document.getElementById('clockDisplay').textContent = '00:00';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('startBtn').textContent = 'Llamado ERR — iniciar reloj';
+  document.getElementById('finishBtn').disabled = true;
+  document.getElementById('finishBtn').textContent = 'Concluir evento';
+  document.getElementById('finishBtn').onclick = finishCase;
+  document.getElementById('estadoCasoDisplay').textContent = 'En curso';
+  document.getElementById('caseStatusBanner').style.display = 'none';
+  document.querySelectorAll('input[type=text], input[type=number], input[type=date], input[type=time], input[type=email], input[type=url], textarea').forEach(el => el.value = '');
+  document.querySelectorAll('input[type=checkbox]').forEach(el => { if(el.id !== 'draftToggle') el.checked = false; });
+  document.querySelectorAll('input[type=radio]').forEach(el => el.checked = false);
+  document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+  document.getElementById('criteriosBanner').style.display = 'none';
+  document.getElementById('extNormal').style.display = 'flex';
+  document.getElementById('extCunero').style.display = 'none';
+  currentCaseId = null;
+  document.getElementById('mailSubject').value = defaultSubject();
+  renderMilestones();
+  onPewsAgeChange();
+  computeNews2(); computePews(); computePewsSubj();
+  document.getElementById('summaryPanel').style.display = 'none';
+  try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+  toast('Nuevo caso listo.', 'ok');
+}
+
+/* ---------------- Historial local + servidor ---------------- */
+const HISTORY_KEY = 'err_history_v1';
+let localHistory = [];
+let cloudCases = [];
+let currentCaseId = null;
+function loadLocalHistory(){
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    localHistory = raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(localHistory)) localHistory = [];
+  } catch(e){ localHistory = []; }
+}
+function persistLocalHistory(){
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(localHistory)); return true; }
+  catch(e){ return false; }
+}
+function buildRecord(){
+  const folio = val('f_caseid');
+  return {
+    id: currentCaseId || ('caso-' + Date.now().toString(36)),
+    folio: folio === '—' ? '(sin folio)' : folio,
+    fecha: new Date().toLocaleString('es-MX'),
+    estado: caseFinished ? 'Finalizado' : 'En curso',
+    tiempoRespuesta: caseFinished ? Number(finishedAt.toFixed(1)) : null,
+    capturadoPor: val('capturadoPor') === '—' ? null : val('capturadoPor'),
+    informe: buildReportText(),
+    state: collectState(),
+    marcas: JSON.parse(JSON.stringify(markedAt)),
+  };
+}
+function saveCaseLocal(silent){
+  const record = buildRecord();
+  currentCaseId = record.id;
+  const idx = localHistory.findIndex(c => c.id === record.id);
+  if(idx >= 0) localHistory[idx] = record; else localHistory.push(record);
+  if(localHistory.length > 200) localHistory = localHistory.slice(-200);
+  const ok = persistLocalHistory();
+  renderCases();
+  updateSyncPill();
+  if(!ok && !silent) toast('No se pudo guardar en este equipo.', 'warn');
+  else if(!silent) toast('Caso guardado en este equipo.', 'ok');
+  return ok;
+}
+async function purgeHistory(){
+  if(!localHistory.length){ toast('No hay casos guardados en este equipo.'); return; }
+  const ok = await askConfirm('¿Borrar el historial de este equipo?', 'Se eliminarán los ' + localHistory.length + ' casos guardados aquí. Los casos guardados en el servidor no se afectan.', 'Sí, borrar');
+  if(!ok) return;
+  localHistory = [];
+  try { localStorage.removeItem(HISTORY_KEY); } catch(e){}
+  renderCases();
+  updateSyncPill();
+}
+async function refreshCases(){
+  try {
+    const res = await fetch('/api/casos?t=' + Date.now(), { cache:'no-store' });
+    const data = res.ok ? await res.json() : [];
+    cloudCases = Array.isArray(data) ? data : [];
+  } catch(e){ cloudCases = []; }
+  renderCases();
+}
+function allCases(){
+  const seen = new Set(localHistory.map(c => c.id));
+  return localHistory.concat(cloudCases.filter(c => !seen.has(c.id)).map(c => ({...c, origen:'servidor'})));
+}
+function renderCases(){
+  const list = document.getElementById('caseList');
+  const cases = allCases();
+  if(!cases.length){
+    list.innerHTML = '<p class="sub" style="margin:0;">Todavía no hay casos guardados. Al concluir un evento se guarda aquí automáticamente.</p>';
+    return;
+  }
+  list.innerHTML = cases.slice().reverse().map(c => `
+    <div class="case-item">
+      <div class="meta">
+        <b>${escapeHtml(c.folio || '(sin folio)')}</b>
+        <span>${escapeHtml(c.fecha || '')}${c.estado ? ' · ' + escapeHtml(c.estado) : ''}${c.tiempoRespuesta != null ? ' · ' + c.tiempoRespuesta + ' min' : ''}${c.capturadoPor ? ' · ' + escapeHtml(c.capturadoPor) : ''}${c.origen === 'servidor' ? ' · del servidor' : ''}</span>
+      </div>
+      <div class="acts">
+        <button class="btn btn-ghost" onclick="continueCase('${c.id}')">Continuar</button>
+        <button class="btn btn-ghost" onclick="viewCaseReport('${c.id}')">Ver informe</button>
+      </div>
+    </div>
+  `).join('');
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function setSyncPill(text, cls){
+  const el = document.getElementById('syncPill');
+  el.textContent = text;
+  el.className = 'sync-pill' + (cls ? ' ' + cls : '');
+}
+function updateSyncPill(){
+  const n = localHistory.length;
+  setSyncPill(n ? n + (n === 1 ? ' caso en este equipo' : ' casos en este equipo') + ' · servidor disponible' : 'Sin casos guardados en este equipo · servidor disponible', n ? 'ok' : '');
+}
+async function saveCaseToCloud(silent){
+  const btn = document.getElementById('saveCloudBtn');
+  btn.disabled = true;
+  setSyncPill('Guardando…');
+  const record = buildRecord();
+  currentCaseId = record.id;
+  try {
+    const res = await fetch('/api/casos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(record),
+    });
+    if(!res.ok) throw new Error('save failed');
+    await refreshCases();
+    setSyncPill('Caso guardado en el servidor', 'ok');
+    btn.disabled = false;
+    return true;
+  } catch(err){
+    btn.disabled = false;
+    setSyncPill('No se pudo guardar en el servidor', 'warn');
+    if(!silent) toast('No se pudo guardar en el servidor.', 'warn');
+    return false;
+  }
+}
+async function continueCase(id){
+  const c = allCases().find(x => x.id === id);
+  if(!c) return;
+  const ok = await askConfirm('¿Cargar el caso ' + (c.folio || '') + '?', 'Se reemplaza lo que tengas capturado en pantalla ahora mismo.', 'Sí, cargar');
+  if(!ok) return;
+  currentCaseId = c.id;
+  Object.keys(markedAt).forEach(k => delete markedAt[k]);
+  Object.assign(markedAt, c.marcas || {});
+  applyState(c.state);
+  renderMilestones();
+  setSyncPill('Caso ' + (c.folio || '') + ' cargado', 'ok');
+}
+function viewCaseReport(id){
+  const c = allCases().find(x => x.id === id);
+  if(!c) return;
+  document.getElementById('summaryText').textContent = c.informe || '(sin informe)';
+  document.getElementById('summaryPanel').style.display = 'block';
+  jumpToSection('sec-guardar');
+}
+async function initCloud(){
+  loadLocalHistory();
+  await refreshCases();
+  updateSyncPill();
+}
+
+/* ---------------- Tema ---------------- */
+function setTheme(mode){
+  document.documentElement.setAttribute('data-theme', mode === 'auto' ? '' : mode);
+  if(mode === 'auto') document.documentElement.removeAttribute('data-theme');
+  document.querySelectorAll('.theme-switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeSet === mode));
+  try { localStorage.setItem('err_theme', mode); } catch(e){}
+}
+(function initTheme(){
+  let saved = 'auto';
+  try { saved = localStorage.getItem('err_theme') || 'auto'; } catch(e){}
+  setTheme(saved);
+})();
+
+/* ---------------- Arranque ---------------- */
+renderMilestones();
+computeNews2();
+computePews();
+computePewsSubj();
+refreshMailLink();
+updateStickyOffset();
+initCloud();
+</script>
+</body>
+</html>
