@@ -1,9 +1,48 @@
-# Guía de despliegue en servidor propio (para el equipo de Sistemas)
+# Guía de despliegue
 
 Esta app es un servidor Node.js (Express) que sirve una página web y una
 base de datos SQLite local. No requiere servicios externos ni cuentas de
 terceros — solo Node.js y, si va a ser accesible por internet, un dominio
 y certificado HTTPS.
+
+## Desplegar en Render (igual que Código Ictus)
+
+Este repo incluye `render.yaml`, así que Render puede configurar el
+servicio automáticamente. Como Claude no tiene acceso a tu cuenta de
+Render, estos pasos los tienes que dar tú (toma 2–3 minutos):
+
+1. Entra a [dashboard.render.com](https://dashboard.render.com) → **New +**
+   → **Blueprint**.
+2. Conecta el repositorio `rickiencinas1999-netizen/codigo-err-cima` (o
+   `CODIGO-ERR-CIMA`, es el mismo repo movido de nombre).
+3. Render detecta `render.yaml` y propone el servicio `codigo-err-cima`
+   (Node, plan Free, build `npm install`, start `npm start`). Confirma con
+   **Apply**.
+4. Cuando termine el primer deploy, Render te da una URL tipo
+   `https://codigo-err-cima.onrender.com` — esa es la app.
+
+Si prefieres no usar el Blueprint, también puedes crear el servicio a mano
+con **New +** → **Web Service**, apuntando al mismo repo, Runtime **Node**,
+Build Command `npm install`, Start Command `npm start`.
+
+**Nota sobre el plan Free vs. persistencia de datos** — igual que en
+Código Ictus: en el plan Free el disco no es persistente, así que
+`data/err.db` (los casos guardados "en el servidor") se borra cada vez que
+el servicio se reinicia o se redepliega. El historial local del navegador
+(`localStorage`) no se pierde, pero si quieren conservar el historial del
+servidor entre reinicios, hay que subir el servicio al plan **Starter** (o
+superior) y agregar un **disco persistente** montado en `data/` desde el
+dashboard de Render (Settings → Disks). Mientras tanto, en Free la app
+funciona perfectamente, solo que el guardado "en el servidor" no es
+duradero.
+
+**Antes de compartir la URL de Render con todo el hospital**, lee la
+sección de seguridad más abajo — la app no tiene login todavía.
+
+## Servidor propio (para el equipo de Sistemas)
+
+Si en vez de Render prefieren correrla en un servidor propio del
+hospital, sigue esta sección.
 
 ## Antes de exponerla a internet — decisión de seguridad pendiente
 

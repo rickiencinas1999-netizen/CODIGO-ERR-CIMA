@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: codigo-err-cima
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.0
