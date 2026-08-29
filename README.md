@@ -20,9 +20,13 @@ Incluye:
   institucional de menos de 5 minutos.
 - **Calculadora NEWS 2** (adultos ≥ 18 años) con interpretación y triage por
   color (Azul/Verde/Amarillo/Naranja/Rojo) según el Anexo 3 del documento.
-- **PEWS 2 (pediátrico)**: captura de datos por grupo de edad — el cálculo
-  automático del puntaje total está pendiente de que el hospital confirme
-  las tablas de corte por edad del Anexo 7 (ver nota en la propia app).
+- **Calculadora PEWS 2** (pediátrico, recién nacido a 17 años) con las
+  tablas de corte de FC/FR/TAS por 5 grupos de edad del Anexo 7, más
+  conciencia, llenado capilar, SpO2, uso de O2 y temperatura, con
+  interpretación por rango (Bajo/Medio/[5–6]/Alto).
+- **PEWS 2 — valoración subjetiva** (Anexo 8): escala cualitativa alterna
+  de 5 parámetros, para cuando no se pueden tomar todos los valores
+  numéricos.
 - **Guía del evento**: liderazgo, roles del equipo, cadena de supervivencia
   5R, modelo de comunicación SBAR y escalamiento a Código Ictus / SICA /
   Código Azul.
@@ -64,22 +68,32 @@ carpeta está excluida de git.
 - `public/index.html` — la aplicación completa (activación, escalas,
   registro Anexo 6).
 
-## Pendientes clínicos conocidos
+## Decisiones sobre ambigüedades del documento (confirmadas con el hospital)
 
-El PR-ENF/GRL-015 tiene puntos de ambigüedad que se le señalaron al usuario
-y quedaron marcados directamente en la app (no se inventaron valores
-clínicos):
+El PR-ENF/GRL-015 tenía algunos puntos de ambigüedad que se le señalaron al
+usuario antes de programar las calculadoras. Así quedaron resueltos:
 
-1. La tabla de "Oxígeno suplementario" de NEWS 2 repite los mismos valores
-   en ambas columnas en vez de tener una escala distinta — se usa una sola
-   escala.
-2. NEWS 2 tiene dos tablas de corte de interpretación ligeramente distintas
-   (cuerpo del texto 3.10–3.12 vs. Anexo 3 tabular) — se usa el Anexo 3.
-3. PEWS 2 requiere tablas de corte de FC/FR/TAS distintas para 5 grupos de
-   edad (Anexo 7) que no se digitalizaron por precaución clínica — la app
-   solo captura los valores crudos, no calcula el puntaje total.
-4. El rango de llenado capilar ">4 segundos" no tiene puntaje asignado en
-   el documento.
-5. La tabla de SpO2 de PEWS 2 solo da puntaje explícito hasta 94% (→0); la
-   app asume que valores mayores también puntúan 0, pendiente de
-   confirmación.
+1. **NEWS 2 — oxígeno suplementario**: la tabla repite los mismos valores
+   en ambas columnas en vez de tener una escala distinta — confirmado, se
+   usa una sola escala de flujo de O2.
+2. **NEWS 2 — interpretación**: se usa la tabla del Anexo 3 (confirmado por
+   el usuario) para el triage por color.
+3. **PEWS 2 — tablas por edad (Anexo 7)**: el usuario compartió las tablas
+   completas de FC/FR/TAS por los 5 grupos de edad; ya están implementadas
+   tal cual en la calculadora.
+4. **PEWS 2 — llenado capilar ">4 segundos"**: el usuario confirmó que
+   puntúa igual que "4 segundos" (3 puntos, el máximo del parámetro).
+5. **PEWS 2 — SpO2**: confirmado que la tabla solo define el lado
+   izquierdo (&lt;91→3, 92→2, 93→1, ≥94→0); no hay valores más altos con
+   puntaje distinto.
+
+Dos particularidades del documento que **no** son errores y se manejan
+igual en ambas escalas: la tabla de "uso de oxígeno" de PEWS 2 es
+simétrica (mismos L/min a ambos lados = mismo puntaje), igual que la de
+NEWS 2, así que se usa una sola escala por flujo. Además, en el Anexo 7 la
+fila de 5–6 puntos no tiene un nombre de categoría asignado (solo color e
+indicaciones clínicas) — la app lo muestra así, sin inventar una etiqueta.
+
+La valoración subjetiva PEWS 2 (Anexo 8) tampoco define categorías de
+riesgo para su puntaje total (0–15); la app solo muestra la suma, sin
+interpretación, tal como está en el documento.

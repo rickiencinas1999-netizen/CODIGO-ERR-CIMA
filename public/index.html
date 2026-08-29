@@ -522,7 +522,7 @@
   <div class="score-dock" id="scoreDock">
     <span>NEWS 2 <b class="mono" id="dockNews2">0</b></span>
     <span>Triage <b class="mono" id="dockTriage">—</b></span>
-    <span>PEWS 2 <b class="mono" id="dockPews2">captura parcial</b></span>
+    <span>PEWS 2 <b class="mono" id="dockPews2">0</b></span>
   </div>
 </div>
 
@@ -568,8 +568,8 @@
 
     <div class="card" id="act-news2">
       <div class="section-label">NEWS 2 — adultos (≥ 18 años)</div>
-      <div class="pending-banner">
-        <b>Nota sobre el documento fuente:</b> en la tabla de "Oxígeno suplementario" del PR-ENF/GRL-015, la columna derecha repite los mismos valores que la izquierda (&lt;3 L/min→1, 4–9 L/min→2, &gt;10 L/min→3) en vez de tener una escala distinta — parece una errata de diseño de tabla. Aquí se usa una sola escala de flujo de O2. Además, el cuerpo del documento (secciones 3.10–3.12) da cortes de interpretación ligeramente distintos a la tabla del Anexo 3; esta calculadora usa el Anexo 3 (la tabla, más reciente) como vigente. Confírmalo con el hospital antes de usar esta calculadora en un paciente real.
+      <div class="privacy-note">
+        <b>Nota sobre el documento fuente (confirmado con el hospital):</b> en la tabla de "Oxígeno suplementario" del PR-ENF/GRL-015, la columna derecha repite los mismos valores que la izquierda en vez de tener una escala distinta — se usa una sola escala de flujo de O2. La interpretación por triage usa la tabla del Anexo 3.
       </div>
       <div class="scoreboard">
         <div>Puntaje total NEWS 2 <span class="val mono" id="news2Total">0</span></div>
@@ -585,49 +585,62 @@
 
     <div class="card" id="act-pews2">
       <div class="section-label">PEWS 2 — pediátrico (recién nacidos a 17 años)</div>
-      <div class="pending-banner">
-        <b>Calculadora incompleta a propósito.</b> El PR-ENF/GRL-015 define PEWS 2 con tablas de corte de frecuencia cardiaca, frecuencia respiratoria y presión arterial sistólica <i>distintas para 5 grupos de edad</i> (Anexo 7), que no se transcribieron aquí en detalle para no arriesgar un error clínico. Tampoco se especifican puntajes para el estado de conciencia/irritabilidad, ni el rango de llenado capilar &gt;4 segundos. Esta sección solo <b>captura</b> los valores — no calcula el puntaje total de PEWS 2 hasta que el hospital confirme esas tablas. Mientras tanto, usa la tabla impresa oficial (Anexo 7) para la valoración pediátrica.
+      <p class="sub">Selecciona primero el grupo de edad: la frecuencia cardiaca, respiratoria y presión arterial usan tablas de corte distintas por edad (Anexo 7).</p>
+      <div class="field" style="max-width:320px;">
+        <label>Grupo de edad</label>
+        <select id="pewsGrupoEdad" onchange="onPewsAgeChange()">
+          <option value="">Selecciona…</option>
+          <option value="0-11m">0 a 11 meses</option>
+          <option value="1-2a">1 a 2 años</option>
+          <option value="2-4a">2 a 4 años (preescolar)</option>
+          <option value="5-10a">5 a 10 años (escolar)</option>
+          <option value="11-17a">11 a 17 años (adolescente)</option>
+        </select>
       </div>
-      <div class="grid cols-3">
-        <div class="field"><label>Grupo de edad</label>
-          <select id="pewsGrupoEdad">
-            <option value="">Selecciona…</option>
-            <option>Recién nacido – 11 meses</option>
-            <option>1–2 años</option>
-            <option>2–4 años (preescolar)</option>
-            <option>5–10 años (escolar)</option>
-            <option>11–17 años (adolescente)</option>
-          </select>
-        </div>
-        <div class="field"><label>Frecuencia cardiaca (lpm)</label><input type="number" id="pewsFc" min="0" max="300"></div>
-        <div class="field"><label>Frecuencia respiratoria (rpm)</label><input type="number" id="pewsFr" min="0" max="150"></div>
-        <div class="field"><label>Presión arterial sistólica (mmHg)</label><input type="number" id="pewsTas" min="0" max="250"></div>
-        <div class="field"><label>Temperatura (°C)</label><input type="number" id="pewsTemp" step="0.1" min="30" max="43"></div>
-        <div class="field"><label>Uso de oxígeno suplementario</label>
-          <select id="pewsO2Uso"><option value="">Selecciona…</option><option>Aire ambiente</option><option>Con oxígeno suplementario</option></select>
-        </div>
-        <div class="field"><label>Estado de conciencia / irritabilidad</label>
-          <select id="pewsConciencia">
-            <option value="">Selecciona…</option>
-            <option>Alerta</option>
-            <option>Irritable</option>
-            <option>Llanto — se controla</option>
-            <option>Llanto — no se controla</option>
-            <option>Estupor / somnolencia</option>
-            <option>No responde / coma</option>
-          </select>
-        </div>
+      <div id="pewsAgeFields" class="pending-banner" style="margin-top:12px;">Selecciona un grupo de edad para capturar frecuencia cardiaca, respiratoria y presión arterial.</div>
+
+      <div class="scale-item">
+        <div class="qlabel">Estado de conciencia</div>
+        <div class="radio-row" id="pewsConcienciaRow"></div>
       </div>
-      <div class="scale-item" style="margin-top:6px;">
+      <div class="scale-item">
         <div class="qlabel">Llenado capilar</div>
         <div class="radio-row" id="pewsCapilarRow"></div>
       </div>
       <div class="scale-item">
         <div class="qlabel">Saturación arterial de oxígeno (SpO2, %)</div>
         <div class="radio-row" id="pewsSpo2Row"></div>
-        <p class="sub" style="margin:6px 0 0;">El documento solo da puntaje explícito hasta 94% (→0). Aquí se asume que 94% y más puntúa 0 — confírmalo con el hospital.</p>
       </div>
-      <div class="interp info" id="pewsPartial">Puntaje parcial (solo llenado capilar + SpO2): 0 — el total de PEWS 2 no se calcula hasta confirmar las tablas por edad.</div>
+      <div class="scale-item">
+        <div class="qlabel">Uso de oxígeno suplementario</div>
+        <div class="radio-row" id="pewsO2Row"></div>
+      </div>
+      <div class="scale-item">
+        <div class="qlabel">Temperatura (°C)</div>
+        <div class="radio-row" id="pewsTempRow"></div>
+      </div>
+
+      <div class="scoreboard" style="margin-top:6px;">
+        <div>Puntaje total PEWS 2 <span class="val mono" id="pewsTotal">0</span></div>
+        <div id="pewsRangoBadge"><span class="triage-badge verde">Bajo</span></div>
+      </div>
+      <div class="interp ok" id="pewsInterp">Selecciona el grupo de edad y los parámetros para calcular.</div>
+      <p class="privacy-note">Nota: la fila de 5–6 puntos del Anexo 7 no trae un nombre de categoría en el documento (solo color e indicaciones) — se muestra sin etiqueta de rango. Además, la tabla de "uso de O2" es simétrica en ambos lados (mismos L/min = mismo puntaje), como la de NEWS 2, así que aquí se usa una sola escala por flujo.</p>
+      <div class="export-row">
+        <button class="btn btn-ghost" onclick="resetPews()">Limpiar PEWS 2</button>
+      </div>
+    </div>
+
+    <div class="card" id="act-pews2-subj">
+      <div class="section-label">PEWS 2 — valoración subjetiva (Anexo 8)</div>
+      <p class="sub">Escala cualitativa alternativa/complementaria, útil cuando no se pueden tomar todos los parámetros numéricos. El documento no define categorías de riesgo para el total — úsala como apoyo junto con el PEWS 2 numérico y el criterio clínico.</p>
+      <div id="pewsSubjItems"></div>
+      <div class="scoreboard">
+        <div>Puntaje total (0–15) <span class="val mono" id="pewsSubjTotal">0</span></div>
+      </div>
+      <div class="export-row">
+        <button class="btn btn-ghost" onclick="resetPewsSubj()">Limpiar valoración subjetiva</button>
+      </div>
     </div>
 
     <details class="ref" id="act-guia">
@@ -1265,24 +1278,171 @@ function copyNews2(){
 }
 buildNews2();
 
-/* ---------------- PEWS 2 (captura parcial) ---------------- */
-buildRadioRow('pewsCapilarRow', ['<2 segundos (0)','2 segundos (1)','2–3 segundos (2)','4 segundos (3)','>4 segundos (puntaje pendiente de confirmar)'], 'pewsCapilar');
-buildRadioRow('pewsSpo2Row', ['<91% (3)','92% (2)','93% (1)','≥94% (0 — asumido, confirmar)'], 'pewsSpo2');
-document.getElementById('pewsCapilarRow').addEventListener('change', computePewsPartial);
-document.getElementById('pewsSpo2Row').addEventListener('change', computePewsPartial);
-function computePewsPartial(){
-  let total = 0;
-  const cap = document.querySelector('input[name="pewsCapilar"]:checked');
-  const spo2 = document.querySelector('input[name="pewsSpo2"]:checked');
-  const capScores = [0,1,2,3,null];
-  const spo2Scores = [3,2,1,0];
-  let capIdx = cap ? [...document.querySelectorAll('input[name="pewsCapilar"]')].findIndex(i=>i.checked) : -1;
-  let spo2Idx = spo2 ? [...document.querySelectorAll('input[name="pewsSpo2"]')].findIndex(i=>i.checked) : -1;
-  if(capIdx >= 0 && capScores[capIdx] != null) total += capScores[capIdx];
-  if(spo2Idx >= 0) total += spo2Scores[spo2Idx];
-  document.getElementById('pewsPartial').textContent = `Puntaje parcial (solo llenado capilar + SpO2): ${total} — el total de PEWS 2 no se calcula hasta confirmar las tablas por edad.`;
-  document.getElementById('dockPews2').textContent = 'parcial: ' + total;
+/* ---------------- PEWS 2 — numérico (Anexo 7) ---------------- */
+const PEWS2_AGE_GROUPS = {
+  '0-11m': {
+    label: '0 a 11 meses',
+    fc: [[3,'<80'],[2,'81–90'],[1,'91–109'],[0,'110–180'],[1,'181–190'],[3,'>200']],
+    fr: [[3,'<20'],[1,'30–39'],[0,'40–60'],[1,'50–59'],[3,'>60']],
+    pas: [[3,'<59'],[1,'60–69'],[0,'70–99'],[1,'100–109'],[3,'>110']],
+  },
+  '1-2a': {
+    label: '1 a 2 años',
+    fc: [[3,'<90'],[2,'90–99'],[1,'100–109'],[0,'110–160'],[1,'161–170'],[2,'171–190'],[3,'>190']],
+    fr: [[3,'<20'],[1,'20–29'],[0,'30–40'],[1,'41–50'],[2,'51–60'],[3,'>60']],
+    pas: [[3,'<59'],[1,'60–69'],[0,'70–99'],[1,'100–109'],[3,'>110']],
+  },
+  '2-4a': {
+    label: '2 a 4 años (preescolar)',
+    fc: [[3,'<70'],[2,'70–79'],[1,'80–89'],[0,'90–140'],[1,'141–160'],[2,'161–170'],[3,'>170']],
+    fr: [[3,'<19'],[0,'20–30'],[1,'31–50'],[2,'51–60'],[3,'>60']],
+    pas: [[3,'<69'],[1,'70–79'],[0,'80–99'],[1,'100–119'],[3,'>120']],
+  },
+  '5-10a': {
+    label: '5 a 10 años (escolar)',
+    fc: [[3,'<60'],[2,'60–69'],[1,'70–79'],[0,'80–120'],[1,'121–140'],[2,'141–160'],[3,'>160']],
+    fr: [[3,'<19'],[0,'20–30'],[1,'31–50'],[2,'51–60'],[3,'>60']],
+    pas: [[3,'<79'],[1,'80–89'],[0,'90–109'],[1,'110–129'],[3,'>130']],
+  },
+  '11-17a': {
+    label: '11 a 17 años (adolescente)',
+    fc: [[3,'<60'],[0,'55–100'],[1,'101–120'],[2,'121–140'],[3,'>140']],
+    fr: [[3,'<10'],[0,'10–20'],[1,'21–30'],[2,'31–40'],[3,'>40']],
+    pas: [[3,'<89'],[1,'90–99'],[0,'100–119'],[1,'120–139'],[3,'>130']],
+  },
+};
+function buildRadioScoreRow(containerId, opts, name){
+  const el = document.getElementById(containerId);
+  el.innerHTML = opts.map(([v,t],i) => `<div class="radio-pill"><input type="radio" name="${name}" id="${name}_${i}" value="${v}" onchange="computePews()"><label for="${name}_${i}">${v} — ${t}</label></div>`).join('');
 }
+function onPewsAgeChange(){
+  const key = document.getElementById('pewsGrupoEdad').value;
+  const wrap = document.getElementById('pewsAgeFields');
+  if(!key){
+    wrap.className = 'pending-banner';
+    wrap.innerHTML = 'Selecciona un grupo de edad para capturar frecuencia cardiaca, respiratoria y presión arterial.';
+    computePews();
+    return;
+  }
+  const g = PEWS2_AGE_GROUPS[key];
+  wrap.className = '';
+  wrap.innerHTML = `
+    <div class="scale-item">
+      <div class="qlabel">Frecuencia cardiaca (lpm) — ${g.label}</div>
+      <div class="radio-row" id="pewsFcRow"></div>
+    </div>
+    <div class="scale-item">
+      <div class="qlabel">Frecuencia respiratoria (rpm) — ${g.label}</div>
+      <div class="radio-row" id="pewsFrRow"></div>
+    </div>
+    <div class="scale-item">
+      <div class="qlabel">Presión arterial sistólica (mmHg) — ${g.label}</div>
+      <div class="radio-row" id="pewsPasRow"></div>
+    </div>
+  `;
+  buildRadioScoreRow('pewsFcRow', g.fc, 'pewsFc');
+  buildRadioScoreRow('pewsFrRow', g.fr, 'pewsFr');
+  buildRadioScoreRow('pewsPasRow', g.pas, 'pewsPas');
+  computePews();
+}
+buildRadioScoreRow('pewsConcienciaRow', [[3,'No responde / coma'],[2,'Estupor'],[1,'Somnolencia'],[0,'Alerta'],[1,'Irritable'],[2,'Llanto — se controla'],[3,'Llanto — no se controla']], 'pewsConciencia');
+buildRadioScoreRow('pewsCapilarRow', [[0,'<2 segundos'],[1,'2 segundos'],[2,'2–3 segundos'],[3,'4 segundos'],[3,'>4 segundos']], 'pewsCapilar');
+buildRadioScoreRow('pewsSpo2Row', [[3,'<91%'],[2,'92%'],[1,'93%'],[0,'≥94%']], 'pewsSpo2');
+buildRadioScoreRow('pewsO2Row', [[0,'Aire ambiente'],[1,'Oxígeno 3 L/min'],[2,'Oxígeno 4 L/min'],[3,'Oxígeno >5 L/min']], 'pewsO2');
+buildRadioScoreRow('pewsTempRow', [[3,'<34.9°C'],[2,'35°C'],[1,'35.1–35.9°C'],[0,'36–37.5°C'],[1,'38–38.5°C'],[2,'38.6–39°C'],[3,'>39°C']], 'pewsTemp');
+
+function pewsScoreOf(name){
+  const c = document.querySelector(`input[name="${name}"]:checked`);
+  return c ? parseInt(c.value,10) : null;
+}
+function computePews(){
+  const parts = ['pewsFc','pewsFr','pewsPas','pewsConciencia','pewsCapilar','pewsSpo2','pewsO2','pewsTemp'];
+  let total = 0, answered = 0;
+  parts.forEach(name => {
+    const v = pewsScoreOf(name);
+    if(v != null){ total += v; answered++; }
+  });
+  document.getElementById('pewsTotal').textContent = total;
+  document.getElementById('dockPews2').textContent = total;
+
+  let rangoLabel, cls, badgeCls, texto;
+  if(total >= 7){ rangoLabel='Alto'; cls='flag'; badgeCls='rojo'; texto='Cambio significativo en el estado de salud. Activación al Equipo de Respuesta Rápida. Monitoreo continuo de signos vitales. Garantizar evaluación médica inmediata por especialista.'; }
+  else if(total >= 5){ rangoLabel='5–6 puntos (sin nombre en el documento)'; cls='warn2'; badgeCls='naranja'; texto='Evaluación urgente por médico de piso. Priorizar evaluación respiratoria y uso de O2. Signos vitales cada hora.'; }
+  else if(total >= 3){ rangoLabel='Medio'; cls='caution'; badgeCls='amarillo'; texto='Signos tempranos de deterioro. Revisión de signos vitales cada 4 horas.'; }
+  else { rangoLabel='Bajo'; cls='ok'; badgeCls='verde'; texto='Sin cambios en el estado de salud del niño. Continúa el plan de cuidados. Signos vitales cada 8 horas.'; }
+  document.getElementById('pewsRangoBadge').innerHTML = `<span class="triage-badge ${badgeCls}">${rangoLabel}</span>`;
+  const interp = document.getElementById('pewsInterp');
+  interp.textContent = `${texto} — ${total} puntos · ${answered} de ${parts.length} parámetros evaluados`;
+  interp.className = 'interp ' + cls;
+}
+function resetPews(){
+  document.getElementById('pewsGrupoEdad').value = '';
+  onPewsAgeChange();
+  ['pewsConciencia','pewsCapilar','pewsSpo2','pewsO2','pewsTemp'].forEach(name => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(el => el.checked = false);
+  });
+  computePews();
+}
+onPewsAgeChange();
+
+/* ---------------- PEWS 2 — valoración subjetiva (Anexo 8) ---------------- */
+const PEWS_SUBJ_ITEMS = [
+  {id:'resp', label:'Respiración', opts:[
+    [0,'Normal para la edad, sin dificultad'],
+    [1,'Ligera dificultad para respirar. Aumento de la FR'],
+    [2,'Dificultad respiratoria moderada. FR alta o baja'],
+    [3,'Dificultad respiratoria severa. Uso de músculos accesorios o pausas en la respiración'],
+  ]},
+  {id:'fc', label:'Frecuencia cardiaca', opts:[
+    [0,'Normal para la edad'],
+    [1,'Ligera taquicardia o bradicardia'],
+    [2,'Taquicardia o bradicardia moderada'],
+    [3,'Taquicardia o bradicardia severa'],
+  ]},
+  {id:'color', label:'Color y perfusión', opts:[
+    [0,'Piel de color normal, buena perfusión'],
+    [1,'Palidez o piel moteada'],
+    [2,'Cianosis periférica'],
+    [3,'Cianosis central'],
+  ]},
+  {id:'neuro', label:'Estado neurológico', opts:[
+    [0,'Alerta y tranquilo'],
+    [1,'Inquieto, pero se consuela fácilmente'],
+    [2,'Irritable, difícil de consolar'],
+    [3,'Letárgico o no responde'],
+  ]},
+  {id:'salud', label:'Salud general / preocupación de padres y enfermera', opts:[
+    [0,'Activo, come y bebe normal, apariencia normal'],
+    [1,'Menor ingesta de alimentos y líquidos, menos activo, no luce normal'],
+    [2,'Rechazo de alimentos y líquidos, significativamente menos activo, preocupación de los padres y enfermera'],
+    [3,'Ninguna ingesta de alimentos y líquidos, inactividad total, padres muy preocupados'],
+  ]},
+];
+function buildPewsSubj(){
+  document.getElementById('pewsSubjItems').innerHTML = PEWS_SUBJ_ITEMS.map(item => `
+    <div class="scale-item">
+      <div class="qlabel">${item.label}</div>
+      <div class="radio-row">
+        ${item.opts.map(([v,t],i) => `<div class="radio-pill"><input type="radio" name="pewsSubj_${item.id}" id="pewsSubj_${item.id}_${i}" value="${v}" onchange="computePewsSubj()"><label for="pewsSubj_${item.id}_${i}">${v} — ${t}</label></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function computePewsSubj(){
+  let total = 0;
+  PEWS_SUBJ_ITEMS.forEach(item => {
+    const c = document.querySelector(`input[name="pewsSubj_${item.id}"]:checked`);
+    if(c) total += parseInt(c.value,10);
+  });
+  document.getElementById('pewsSubjTotal').textContent = total;
+}
+function resetPewsSubj(){
+  PEWS_SUBJ_ITEMS.forEach(item => {
+    document.querySelectorAll(`input[name="pewsSubj_${item.id}"]`).forEach(el => el.checked = false);
+  });
+  computePewsSubj();
+}
+buildPewsSubj();
 
 /* ---------------- Escalamiento ---------------- */
 const escalationStamps = {};
@@ -1319,6 +1479,10 @@ function checkedList(containerId){
 function radioVal(name){
   const c = document.querySelector(`input[name="${name}"]:checked`);
   return c ? c.value : '—';
+}
+function radioLabelText(name){
+  const c = document.querySelector(`input[name="${name}"]:checked`);
+  return c && c.nextElementSibling ? c.nextElementSibling.textContent : '—';
 }
 function setNow(id){
   const el = document.getElementById(id);
@@ -1373,17 +1537,23 @@ function buildReportText(){
   row('Puntaje total', document.getElementById('news2Total').textContent);
   row('Interpretación', document.getElementById('news2Interp').textContent);
 
-  head('PEWS 2 (pediátrico) — captura');
-  row('Grupo de edad', val('pewsGrupoEdad'));
-  row('FC', val('pewsFc'), 'lpm');
-  row('FR', val('pewsFr'), 'rpm');
-  row('TAS', val('pewsTas'), 'mmHg');
-  row('Temp', val('pewsTemp'), '°C');
-  row('Uso de O2', val('pewsO2Uso'));
-  row('Estado de conciencia', val('pewsConciencia'));
-  row('Llenado capilar', radioVal('pewsCapilar'));
-  row('SpO2', radioVal('pewsSpo2'));
-  push('  (Puntaje total de PEWS 2 pendiente de confirmar tablas por edad — Anexo 7)');
+  head('PEWS 2 (pediátrico) — numérico, Anexo 7');
+  { const ageKey = document.getElementById('pewsGrupoEdad').value;
+    row('Grupo de edad', ageKey && PEWS2_AGE_GROUPS[ageKey] ? PEWS2_AGE_GROUPS[ageKey].label : '—'); }
+  row('Frecuencia cardiaca', radioLabelText('pewsFc'));
+  row('Frecuencia respiratoria', radioLabelText('pewsFr'));
+  row('Presión arterial sistólica', radioLabelText('pewsPas'));
+  row('Estado de conciencia', radioLabelText('pewsConciencia'));
+  row('Llenado capilar', radioLabelText('pewsCapilar'));
+  row('SpO2', radioLabelText('pewsSpo2'));
+  row('Uso de O2', radioLabelText('pewsO2'));
+  row('Temperatura', radioLabelText('pewsTemp'));
+  row('Puntaje total', document.getElementById('pewsTotal').textContent);
+  row('Interpretación', document.getElementById('pewsInterp').textContent);
+
+  head('PEWS 2 — valoración subjetiva, Anexo 8');
+  PEWS_SUBJ_ITEMS.forEach(item => row(item.label, radioLabelText('pewsSubj_' + item.id)));
+  row('Puntaje total subjetivo (0–15)', document.getElementById('pewsSubjTotal').textContent);
 
   head('Motivo de activación');
   row('Motivo', checkedList('motivoGrid'));
@@ -1588,7 +1758,7 @@ function collectState(){
   document.querySelectorAll('input[type=checkbox]').forEach(el => {
     if(el.id && el.id !== 'draftToggle') state.checks[el.id] = el.checked;
   });
-  document.querySelectorAll('input[type=radio]:checked').forEach(el => { state.radios[el.name] = el.value; });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => { state.radios[el.name] = el.id; });
   state.escalationStamps = JSON.parse(JSON.stringify(escalationStamps));
   return state;
 }
@@ -1596,9 +1766,10 @@ function applyState(state){
   if(!state) return;
   Object.entries(state.fields || {}).forEach(([id,v]) => { const el = document.getElementById(id); if(el) el.value = v; });
   Object.entries(state.checks || {}).forEach(([id,v]) => { const el = document.getElementById(id); if(el) el.checked = v; });
-  Object.entries(state.radios || {}).forEach(([name,v]) => {
-    const el = document.querySelector(`input[name="${name}"][value="${CSS.escape(v)}"]`);
-    if(el) el.checked = true;
+  onPewsAgeChange();
+  Object.entries(state.radios || {}).forEach(([name,id]) => {
+    const el = document.getElementById(id);
+    if(el && el.name === name) el.checked = true;
   });
   if(state.escalationStamps){
     Object.keys(escalationStamps).forEach(k => delete escalationStamps[k]);
@@ -1612,7 +1783,7 @@ function applyState(state){
   }
   const cuneroEvt = new Event('change');
   document.getElementById('cuneroRow').dispatchEvent(cuneroEvt);
-  computeNews2(); computePewsPartial();
+  computeNews2(); computePews(); computePewsSubj();
   renderMilestones();
 }
 function saveDraft(){
@@ -1678,7 +1849,8 @@ async function resetAll(){
   currentCaseId = null;
   document.getElementById('mailSubject').value = defaultSubject();
   renderMilestones();
-  computeNews2(); computePewsPartial();
+  onPewsAgeChange();
+  computeNews2(); computePews(); computePewsSubj();
   document.getElementById('summaryPanel').style.display = 'none';
   try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
   toast('Nuevo caso listo.', 'ok');
@@ -1845,7 +2017,8 @@ function setTheme(mode){
 /* ---------------- Arranque ---------------- */
 renderMilestones();
 computeNews2();
-computePewsPartial();
+computePews();
+computePewsSubj();
 refreshMailLink();
 updateStickyOffset();
 initCloud();
