@@ -7,6 +7,3 @@ services:
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /
-    envVars:
-      - key: NODE_VERSION
-        value: 20.11.0
