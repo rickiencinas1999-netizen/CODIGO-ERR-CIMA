@@ -1,0 +1,16 @@
+{
+  "name": "Equipo de Respuesta Rápida (ERR) — Hospital CIMA",
+  "short_name": "Código ERR",
+  "description": "Activación, escalas (NEWS 2 / PEWS 2) y registro del Equipo de Respuesta Rápida — Hospital CIMA",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F9F8",
+  "theme_color": "#008375",
+  "lang": "es-MX",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
