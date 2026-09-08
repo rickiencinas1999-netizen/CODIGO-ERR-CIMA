@@ -114,14 +114,18 @@
   a{color:var(--brand);}
 
   /* ===== Top bar ===== */
+  /* Safe-area insets matter once the app is added to the home screen (standalone
+     mode): there's no browser chrome pushing content clear of the notch/status
+     bar or the home-indicator area, so we have to pad for env(safe-area-inset-*)
+     ourselves. Harmless in normal browser tabs, where those envs are just 0. */
   .topbar{
     position:sticky; top:0; z-index:30;
     background:var(--surface);
     border-bottom:1px solid var(--border);
-    padding:14px 20px 0 20px;
+    padding:max(14px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
     transition:padding .15s ease;
   }
-  .topbar.compact{ padding-top:6px; }
+  .topbar.compact{ padding-top:max(6px, env(safe-area-inset-top)); }
   .topbar.compact .brandblock p,
   .topbar.compact .theme-note{ display:none; }
   .topbar.compact .brandblock h1{ font-size:1.02rem; }
@@ -155,7 +159,7 @@
     position:sticky; top:var(--topbar-h, 76px); z-index:29;
     background:var(--navy-tint);
     border-bottom:1px solid var(--border);
-    padding:12px 20px;
+    padding:12px max(20px, env(safe-area-inset-right)) 12px max(20px, env(safe-area-inset-left));
     display:flex; align-items:center; gap:22px; flex-wrap:wrap;
   }
   .clock-wrap{ display:flex; align-items:baseline; gap:10px; }
@@ -196,7 +200,7 @@
   .score-dock b{ color:var(--brand-strong); font-size:0.94rem; margin-left:5px; }
 
   /* ===== Layout ===== */
-  main{ max-width:1180px; margin:0 auto; padding:22px 20px 80px; }
+  main{ max-width:1180px; margin:0 auto; padding:22px max(20px, env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); }
   .tab-panel{ display:none; }
   .tab-panel.active{ display:block; }
 
@@ -378,7 +382,7 @@
   .summary-pre{ white-space:pre-wrap; font-family:'IBM Plex Mono',monospace; font-size:0.8rem; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:14px; max-height:420px; overflow:auto; }
   .privacy-note{ font-size:0.76rem; color:var(--text-muted); background:var(--surface-2); border:1px dashed var(--border); border-radius:8px; padding:10px 12px; margin-top:6px; }
 
-  footer{ text-align:center; padding:26px 20px 40px; color:var(--text-muted); font-size:0.76rem; }
+  footer{ text-align:center; padding:26px max(20px, env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); color:var(--text-muted); font-size:0.76rem; }
 
   #summaryPrintArea{ display:none; }
   @media print{
@@ -389,7 +393,7 @@
   }
 
   /* ===== Avisos y confirmación propios ===== */
-  #toastHost{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:120;
+  #toastHost{ position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:120;
     display:flex; flex-direction:column; gap:8px; align-items:center; width:calc(100% - 28px); max-width:460px; pointer-events:none; }
   .toast{ background:var(--navy); color:#fff; border-radius:10px; padding:12px 16px; font-size:0.86rem;
     font-weight:600; box-shadow:0 8px 26px rgba(0,0,0,.28); width:100%; }
@@ -449,9 +453,9 @@
   /* ===== Mobile / tablet layout ===== */
   @media (max-width:860px){
     body{ -webkit-text-size-adjust:100%; }
-    main{ padding:14px 12px 90px; }
+    main{ padding:14px max(12px, env(safe-area-inset-right)) calc(90px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
     .card{ padding:15px 14px; border-radius:12px; }
-    .topbar{ padding:9px 12px 0; }
+    .topbar{ padding:max(9px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left)); }
     .topbar-row{ align-items:center; gap:10px; }
     .brandblock h1{ font-size:1.05rem; }
     .brandblock p, .theme-note, .logo-block{ display:none; }
@@ -461,7 +465,7 @@
     .tab-btn{ font-size:0.82rem; padding:9px 4px; }
     .tab-btn + .tab-btn{ margin-left:14px; }
 
-    .timerbar{ flex-direction:column; flex-wrap:nowrap; align-items:stretch; gap:8px; padding:8px 12px; min-width:0; }
+    .timerbar{ flex-direction:column; flex-wrap:nowrap; align-items:stretch; gap:8px; padding:8px max(12px, env(safe-area-inset-right)) 8px max(12px, env(safe-area-inset-left)); min-width:0; }
     .timer-main{ gap:9px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; min-width:0; }
     .timer-main .btn, .timer-main .clock-wrap{ flex:none; }
     .clock-label{ display:none; }
@@ -493,7 +497,7 @@
     .export-row .btn, .share-row .btn, .collapse-tools .btn{ flex:1 1 auto; }
     .summary-pre{ font-size:0.72rem; max-height:340px; }
     .eval-table table{ min-width:460px; }
-    footer{ padding:20px 14px 30px; }
+    footer{ padding:20px max(14px, env(safe-area-inset-right)) calc(30px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
   }
 </style>
 </head>
