@@ -122,10 +122,10 @@
     position:sticky; top:0; z-index:30;
     background:var(--surface);
     border-bottom:1px solid var(--border);
-    padding:max(14px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
+    padding:calc(14px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
     transition:padding .15s ease;
   }
-  .topbar.compact{ padding-top:max(6px, env(safe-area-inset-top)); }
+  .topbar.compact{ padding-top:calc(6px + env(safe-area-inset-top)); }
   .topbar.compact .brandblock p,
   .topbar.compact .theme-note{ display:none; }
   .topbar.compact .brandblock h1{ font-size:1.02rem; }
@@ -257,6 +257,8 @@
   }
   .field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--brand); outline-offset:1px; }
   .field textarea{ resize:vertical; min-height:78px; font-family:inherit; }
+  /* Safari iOS renders type=date/time input taller than other fields unless height is pinned */
+  .field input[type=date], .field input[type=time]{ height:38px; line-height:normal; }
   .field-inline-btn{ display:flex; gap:8px; align-items:flex-end; min-width:0; }
   .field-inline-btn .field{ flex:1; min-width:0; }
   .field-inline-btn .btn{ flex:none; }
@@ -455,7 +457,7 @@
     body{ -webkit-text-size-adjust:100%; }
     main{ padding:14px max(12px, env(safe-area-inset-right)) calc(90px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
     .card{ padding:15px 14px; border-radius:12px; }
-    .topbar{ padding:max(9px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left)); }
+    .topbar{ padding:calc(9px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left)); }
     .topbar-row{ align-items:center; gap:10px; }
     .brandblock h1{ font-size:1.05rem; }
     .brandblock p, .theme-note, .logo-block{ display:none; }
@@ -479,6 +481,7 @@
     .field input[type=text], .field input[type=number], .field input[type=date],
     .field input[type=time], .field input[type=email], .field input[type=url], .field select, .field textarea,
     .mobile-jump select{ font-size:16px; padding:11px 12px; min-height:44px; }
+    .field input[type=date], .field input[type=time]{ height:44px; }
     .tab-btn{ min-height:44px; }
     .radio-pill label{ min-height:44px; display:flex; align-items:center; font-size:0.88rem; padding:9px 13px; }
     .radio-row{ gap:8px; }
